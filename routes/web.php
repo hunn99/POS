@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\levelController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\TransactionController;
@@ -31,4 +32,7 @@ Route::get('/user/{id}/name/{name}', [UserController::class, 'userProfile']);
 
 Route::get('/transaction', [TransactionController::class, 'transaction']);
 
+// js 3
 Route::get('/level', [levelController::class, 'index']);
+Route::get('/kategori', [KategoriController::class, 'index']);
+
