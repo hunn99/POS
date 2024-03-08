@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\levelController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
@@ -29,3 +30,5 @@ Route::prefix('category')->group(function(){
 Route::get('/user/{id}/name/{name}', [UserController::class, 'userProfile']);
 
 Route::get('/transaction', [TransactionController::class, 'transaction']);
+
+Route::get('/level', [levelController::class, 'index']);
