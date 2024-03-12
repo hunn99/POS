@@ -1,14 +1,9 @@
 <div align=center>
 
+## <strong>2241720107 | Denny Malik Ibrahim | 12 | TI-2H<br><hr>
 # <strong> Laporan Praktikum Web Lanjut </strong>
 
-# <strong> Jobsheet 2 (Routing Controller View) </strong>
-
-## <strong>NIM : 2241720107 <br>
-
-## <strong>Nama : Denny Malik Ibrahim <br>
-
-## <strong>Kelas : TI-2H
+# <strong> Jobsheet 2 <br> (Routing, Controller, dan View) </strong>
 
 </div>
 
@@ -41,7 +36,7 @@ Menampilkan halaman transaksi (route basic)
 
 <div align=center>
 
-# Jobsheet 3 (Migration, Seeder, DB Facade, Query Builder, dan Eloquent ORM)
+# Jobsheet 3 <br> (Migration, Seeder, DB Facade, Query Builder, dan Eloquent ORM)
 
 </div>
 
@@ -53,7 +48,7 @@ Menampilkan halaman transaksi (route basic)
 
 <div align=center>
 
-# Jobsheet 4 (Model dan Eloquent ORM)
+# Jobsheet 4 <br> (Model dan Eloquent ORM)
 
 </div>
 
