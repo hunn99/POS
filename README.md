@@ -52,3 +52,30 @@ Menampilkan halaman transaksi (route basic)
 
 </div>
 
+<br>
+
+## PROPERTI $fillable DAN $guarded
+### Praktikum 1 - $fillable
+1. Menambahkan $fillable di model UserModel 
+
+    `protected $fillable = ['level_id', 'username', 'nama', 'password'];`
+
+2. Mengubah script pada UserController
+
+        ```php
+        public function index()
+        { 
+            $data = [
+            'level_id' => 2,
+            'username' => 'manager 2',
+            'nama' => 'manager 2',
+            'password' => Hash::make('12345')
+            ];
+
+            //coba akses model usermodel
+            $user = UserModel::all(); //ambil semua data dari tabel m_user
+            return view('user', ['data' => $user]);
+        }
+        ```
+
+        
