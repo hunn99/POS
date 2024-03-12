@@ -1,4 +1,4 @@
-<div>
+<div align=center>
 
 # <strong> Laporan Praktikum Web Lanjut </strong>
 
@@ -10,7 +10,7 @@
 
 ## <strong>Kelas : TI-2H
 
-</div align=center>
+</div>
 
 <br>
 
@@ -35,10 +35,25 @@ Transaksi <br>
 Menampilkan halaman transaksi (route basic)
 ![alt text](images/image-6.png)
 <br>
+<hr>
+<br>
 <br>
 
-<div>
+<div align=center>
 
-# Jobsheet 3 (Migration)
+# Jobsheet 3 (Migration, Seeder, DB Facade, Query Builder, dan Eloquent ORM)
 
 </div>
+
+## [laporan disini](laporan/Jobsheet-3_PWL_DennyMalikIbrahim_TI-2H.pdf)
+<br>
+<hr>
+<br>
+<br>
+
+<div align=center>
+
+# Jobsheet 4 (Model dan Eloquent ORM)
+
+</div>
+
