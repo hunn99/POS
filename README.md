@@ -81,7 +81,7 @@ Menampilkan halaman transaksi (route basic)<br>
         return view('user', ['data' => $user]);
     }
     ```
-3. localhostPWL_POS/public/user
+3. localhostPWL_POS/public/user\
     ![alt text](images/js4/p1.1.png)
 
     Terlihat ada penambahan data manager 2 
@@ -97,7 +97,7 @@ Menampilkan halaman transaksi (route basic)<br>
     'nama' => 'Manager 3',
     ```
 
-6. localhostPWL_POS/public/user
+6. localhostPWL_POS/public/user\
     ![alt text](images/js4/p1.2.png)
 
     Terjadi error, karena field password tidak memiliki default valuenya
