@@ -1,6 +1,7 @@
 <div align=center>
 
 # <strong> Laporan Praktikum Web Lanjut </strong>
+
 ## <strong>2241720107 | Denny Malik Ibrahim | 12 | TI-2H<br><hr>
 
 # <strong> Jobsheet 2 <br> (Routing, Controller, dan View) </strong>
@@ -34,6 +35,7 @@ Menampilkan halaman transaksi (route basic)<br>
 
 ![alt text](images/js3/image-6.png)
 <br>
+
 <hr>
 <br>
 <br>
@@ -45,6 +47,7 @@ Menampilkan halaman transaksi (route basic)<br>
 </div>
 
 ## [laporan disini](laporan/Jobsheet-3_PWL_DennyMalikIbrahim_TI-2H.pdf)
+
 <br>
 <hr>
 <br>
@@ -59,8 +62,11 @@ Menampilkan halaman transaksi (route basic)<br>
 <br>
 
 ## A. PROPERTI $fillable DAN $guarded
+
 ### Praktikum 1 - $fillable
+
 1. Menambahkan $fillable di model UserModel
+
     ```php
     protected $fillable = ['level_id', 'username', 'nama', 'password'];
     ```
@@ -81,25 +87,115 @@ Menampilkan halaman transaksi (route basic)<br>
         return view('user', ['data' => $user]);
     }
     ```
-3. localhostPWL_POS/public/user\
-    ![alt text](images/js4/p1.1.png)
+3. localhostPWL_POS/public/user<br>
+   ![alt text](images/js4/p1.1.png)
 
-    Terlihat ada penambahan data manager 2 
+    Terlihat ada penambahan data manager 2
 
 4. Mengubah file model UserModel.php
+
     ```php
     protected $fillable = ['level_id', 'username', 'nama'];
     ```
 
 5. Mengubah bagian array pada $data di UserController
+
     ```php
     'username' => 'manager_tiga',
     'nama' => 'Manager 3',
     ```
 
-6. localhostPWL_POS/public/user\
-    ![alt text](images/js4/p1.2.png)
+6. localhostPWL_POS/public/user<br>
+   ![alt text](images/js4/p1.2.png)
 
     Terjadi error, karena field password tidak memiliki default valuenya
 
+### $guarded
+
+-- Kebalikan dari $fillable. Semua kolom yang ditambahkan ke $guarded akan **diabaikan** oleh Eloquent ketika melakukan **insert/ update**.
+Secara default $guarded isinya array("*"),
+berarti semua atribut tidak bisa diset melalui *mass assignment\*.
+
+_Mass Assignment_ adalah fitur canggih yang menyederhanakan proses pengaturan beberapa
+atribut model sekaligus, menghemat waktu dan tenaga
+
+## B. RETRIEVING SINGLE MODELS
+
+### Praktikum 2.1 - Retrieving Single Models
+
+1. Mengubah script pada UserController
+
+    ```php
+    $user = UserModel::find(1);
+    ```
+
+2. Mengubah view user.blade
+
+    ```php
+    <tr>
+        <td>{{$data->user_id}} </td>
+        <td>{{$data->username}} </td>
+        <td>{{$data->nama}} </td>
+        <td>{{$data->level_id}} </td>
+    </tr>
+    ```
+
+3. Hasil<br>
+   ![alt text](images/js4/p2.1.png)
+
+4. Mengubah script pada UserController
+
+    ```php
+    $user = UserModel::where('level_id', 1)->first();
+    ```
+
+5. Hasil<br>
+   ![alt text](images/js4/p2.1.png)
+
+6. Mengubah script pada UserController
+
+    ```php
+    $user = UserModel::firstWhere('level_id', 1);
+    ```
+
+7. Hasil<br>
+   ![alt text](images/js4/p2.1.png)
+
+    Ketiga cara diatas adalah cara yang berbeda dengan hasil yang sama<br>
+
+    -- Tindakan lain jika tidak ada hasil lain yang ditemukan menggunakan metode **findOr** dan **firstOr** yang akan mengembalikan satu contoh model atau akan menjalankan didalam fungsi <br>
+
+    ```php
+     $user = UserModel::findOr(1, function(){
+        // ...
+    });
+
+    $user = UserModel::where('level_id', '>', 3)->firstOr(function(){
+        // ...
+    });
+    ```
+
+8. Mengubah script pada UserController
+
+    ```php
+    $user = UserModel::findOr(1, ['username', 'nama'], function(){
+            abort(404);
+    });
+    ```
+
+9. Hasil<br>
+   ![alt text](images/js4/p2.2.png)
+   Data yang keluar hanya username dan nama, pada level_id 1, karena hanya data dari 2 field tersebut yang diambil
+
+10. Mengubah script pada UserController
+
+    ```php
+    $user = UserModel::findOr(20, ['username', 'nama'], function(){
+            abort(404);
+    });
+    ```
+
+11. Hasil<br>
+    ![alt text](images/js4/p2.3.png)
+    Jika tidak ada hasil yang diinginkan, maka akan menjalankan fungsi *abort(404)*
 
