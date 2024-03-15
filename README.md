@@ -222,6 +222,32 @@ Illuminate\Database\Eloquent\ModelNotFoundException akan dilempar
     ```
 
 4. Hasil<br>
-    ![alt text](images/js4/p2.5.png)<br>
-    Di database tidak ada username 'manager9'
+   ![alt text](images/js4/p2.5.png)<br>
+   Di database tidak ada username 'manager9'
 
+### Praktikum 2.3 - Retreiving Aggregrates
+
+1. Mengubah script pada UserController
+
+    ```php
+    $user = UserModel::where('level_id', '2')->count();
+    dd($user);
+    ```
+
+2. Hasil<br>
+   ![alt text](images/js4/p2.6.png)<br>
+   'level_id' yang bernilai 2 ada 3
+
+3. Menampilkan seperti dibawah ini
+
+    ```php
+     <tr>
+        <th>Jumlah Pengguna</th>
+    </tr>
+    <tr>
+        <td>{{$data}}</td>
+    </tr>
+    ```
+
+    Hasil<br>
+    ![alt text](image.png)
