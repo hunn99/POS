@@ -351,7 +351,72 @@ Illuminate\Database\Eloquent\ModelNotFoundException akan dilempar
     ```
 
 11. Hasil<br>
-    ![alt text](image.png)<br>
+    ![alt text](images/js4/p2.12.png)<br>
     Pada firstOrNew perlu adanya tambahan metode save untuk secara manual di simpan di database
 
+### Praktikum 2.5 - Attribute Changes
+
+-- Eloquent menyediakan metode isDirty, isClean, dan wasChanged untuk memeriksa
+keadaan internal model
+Metode isDirty menentukan apakah ada atribut model yang telah diubah sejak model diambil
+Metode isClean akan
+menentukan apakah suatu atribut tetap tidak berubah sejak model diambil
+
+1. Mengubah script pada UserController
+
+    ```php
+     $user = UserModel::create([
+            'username' => 'manager55',
+            'nama' => 'Manager55',
+            'password' => Hash::make(12345),
+            'level_id' => 2,
+    ]);
+
+    $user->username = 'manager56';
+
+    $user->isDirty(); // true
+    $user->isDirty('username'); // true
+    $user->isDirty('nama'); // false
+    $user->isDirty(['nama', 'username']); // true
+
+    $user->isClean(); // false
+    $user->isClean('username'); // false
+    $user->isClean('nama'); // true
+    $user->isClean(['nama', 'username']); // false
+
+    $user->save();
+
+    $user->isDirty(); // false
+    $user->isClean(); // true
+    dd($user->isDirty());
+    ```
+
+2. Hasil<br>
+   ![alt text](images/js4/p2.13.png)<br>
+   Output isDirty() akan false karena setelah di simpan tidak ada perubahan, karena isDirty menentukan apakah ada atribut model yang telah diubah sejak model diambil
+
+3. Mengubah script pada UserController
+
+    ```php
+    $user = UserModel::create([
+            'username' => 'manager11',
+            'nama' => 'Manager11',
+            'password' => Hash::make(12345),
+            'level_id' => 2,
+    ]);
+
+    $user->username = 'manager12';
+
+    $user->save();
+
+    $user->wasChanged(); // true
+    $user->wasChanged('username'); // true
+    $user->wasChanged(['username', 'level_id']); // true
+    $user->wasChanged('nama'); // false
+    dd($user->wasChanged(['nama', 'username'])); //true
+    ```
+
+4. Hasil<br>
+   ![alt text](images/js4/p2.14.png)<br>
+   Hasilnya true karena wasChanged memeriksa keadaan internal model dan menentukan bagaimana atributnya berubah sejak model pertama kali diambil.
 
