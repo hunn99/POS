@@ -420,3 +420,222 @@ menentukan apakah suatu atribut tetap tidak berubah sejak model diambil
    ![alt text](images/js4/p2.14.png)<br>
    Hasilnya true karena wasChanged memeriksa keadaan internal model dan menentukan bagaimana atributnya berubah sejak model pertama kali diambil.
 
+### Praktikum 2.6 - Create, Read, Update, Delete (CRUD)
+
+1. Mengubah script pada view user
+
+    ```php
+    <body>
+        <h1>Data User</h1>
+        <a href="/user/tambah">+ Tambah User</a>
+        <table border="1" cellpadding="2" cellspacing="0">
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Nama</th>
+                <th>ID Level Pengguna</th>
+                <th>Aksi</th>
+            </tr>
+            @foreach ($data as $d)
+                <tr>
+                    <td>{{ $d->user_id }} </td>
+                    <td>{{ $d->username }} </td>
+                    <td>{{ $d->nama }} </td>
+                    <td>{{ $d->level_id }} </td>
+                    <td><a href="/user/ubah/{{ $d->user_id }}">Ubah</a> | <a href="/user/hapus/{{ $d->user_id }}">Hapus</a></td>
+                </tr>
+            @endforeach
+
+        </table>
+        </body>
+    ```
+
+2. Mengubah script pada UserController
+
+    ```php
+    $user = UserModel::all();
+    return view('user', ['data' => $user]);
+    ```
+
+3. Hasil<br>
+   ![alt text](images/js4/p2.15.png)<br>
+   Terdapat aksi untuk tambah, ubah dan hapus. Tetapi jika di tekan akan error karena masih belum mendefinikan route, view, dan controllernya
+
+4. Menambahkan file user_tambah pada view
+
+    ```php
+    <body>
+        <h1>Form Tambah Data User</h1>
+        <form method="post" action="/user/tambah_simpan">
+
+            {{ csrf_field() }}
+
+            <label for="">Username</label>
+            <input type="text" name="username" placeholder="Masukan Username" >
+            <br>
+            <label for="">Nama</label>
+            <input type="text" name="nama" placeholder="Masukan Nama">
+            <br>
+            <label for="">Password</label>
+            <input type="password" name="password" placeholder="Masukan Password">
+            <br>
+            <label for="">Level ID</label>
+            <input type="number" name="level_id" placeholder="Masukan ID Level">
+            <br><br>
+            <input type="submit" class="btn btn-success" value="Simpan">
+        </form>
+    </body>
+    ```
+
+5. Menambah script pada route
+
+    ```php
+    Route::get('/user/tambah', [UserController::class, 'tambah']);
+    ```
+
+6. Menambah script pada UserController
+
+    ```php
+    public function tambah()
+    {
+        return view('user_tambah');
+    }
+    ```
+
+7. Hasil<br>
+   ![alt text](images/js4/p2.16.png)
+
+8. Menambah script pada route
+
+    ```php
+    Route::get('/user/tambah_simpan', [UserController::class, 'tambah_simpan']);
+    ```
+
+9. Menambah script pada UserController
+
+    ```php
+    public function tambah_simpan(Request $request)
+    {
+        UserModel::create([
+            'username' => $request->username,
+            'nama' => $request->nama,
+            'password' => Hash::make('$request->password'),
+            'level_id' => $request->level_id
+        ]);
+
+        return redirect('/user');
+    }
+    ```
+
+10. Hasil<br>
+    ![alt text](images/js4/p2.17.png)<br>
+    ![alt text](images/js4/p2.18.png)<br>
+    Setelah mengisi form akan kembali ke halaman user dan terlihat ada data yang ditambahkan
+
+11. Membuat update atau ubah data user
+
+    ```php
+    <body>
+    <h1>Form Ubah Data User</h1>
+    <a href="/user">Kembali</a>
+    <br><br>
+
+    <form action="/user/ubah_simpan/{{ $data->user_id }}" method="post">
+
+        {{ csrf_field() }}
+        {{ method_field('PUT') }}
+
+        <label for="">Username</label>
+        <input type="text" name="username" placeholder="Masukan Username" value="{{ $data->username }}">
+        <br>
+        <label for="">Nama</label>
+        <input type="text" name="nama" placeholder="Masukan Nama" value="{{ $data->nama }}">
+        <br>
+        <label for="">Password</label>
+        <input type="password" name="password" placeholder="Masukan Password" value="{{ $data->password }}">
+        <br>
+        <label for="">Level ID</label>
+        <input type="number" name="level_id" placeholder="Masukan ID Level" value="{{ $data->level_id }}">
+        <br><br>
+        <input type="submit" class="btn btn-success" value="Ubah">
+
+    </form>
+    </body>
+    ```
+
+12. Menambah script pada routes
+
+    ```php
+    Route::get('/user/ubah/{id}', [UserController::class, 'ubah']);
+    ```
+
+13. Menambah script pada UserController
+
+    ```php
+    public function ubah($id)
+    {
+        $user = UserModel::find($id);
+        return view('user_ubah', ['data' => $user]);
+    }
+    ```
+
+14. Hasil<br>
+    ![alt text](images/js4/p2.19.png)<br>
+
+15. Menambah script pada routes
+
+    ```php
+    Route::put('/user/ubah_simpan/{id}', [UserController::class, 'ubah_simpan']);
+    ```
+
+16. Menambah script pada UserController
+
+    ```php
+    public function ubah_simpan($id, Request $request)
+    {
+        $user = UserModel::find($id);
+
+        $user->username = $request->username;
+        $user->nama = $request->nama;
+        $user->password = Hash::make('$request->password');
+        $user->level_id = $request->level_id;
+
+        $user->save();
+
+        return redirect ('/user');
+    }
+    ```
+
+17. Hasil<br>
+    ![alt text](images/js4/p2.20.png)<br>
+    Mengubah level_id menjadi 2
+
+    ![alt text](images/js4/p2.21.png)<br>
+    Setelah mengubah kembali ke halaman user dengan level_id denny berubah jadi 2
+
+18. Menambah script pada routes
+
+    ```php
+    Route::get('/user/hapus/{id}', [UserController::class, 'hapus']);
+    ```
+
+19. Menambah script pada UserController
+
+    ```php
+    public function hapus($id)
+    {
+        $user = UserModel::find($id);
+        $user->delete();
+
+        return redirect('/user');
+    }
+    ```
+
+20. Hasil<br>
+    ![alt text](images/js4/p2.22.png)<br>
+    ![alt text](images/js4/p2.23.png)<br>
+    Data denny telah dihapus
+
+
+
+
