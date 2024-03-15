@@ -46,7 +46,7 @@ Menampilkan halaman transaksi (route basic)<br>
 
 </div>
 
-## [laporan disini](laporan/Jobsheet-3_PWL_DennyMalikIbrahim_TI-2H.pdf)
+## 😊👉 [Laporan disini](laporan/Jobsheet-3_PWL_DennyMalikIbrahim_TI-2H.pdf) 👈😊
 
 <br>
 <hr>
@@ -117,7 +117,7 @@ Secara default $guarded isinya array("*"),
 berarti semua atribut tidak bisa diset melalui *mass assignment\*.
 
 _Mass Assignment_ adalah fitur canggih yang menyederhanakan proses pengaturan beberapa
-atribut model sekaligus, menghemat waktu dan tenaga
+atribut model sekaligus, menghemat waktu dan tenaga.
 
 ## B. RETRIEVING SINGLE MODELS
 
@@ -159,7 +159,7 @@ atribut model sekaligus, menghemat waktu dan tenaga
     ```
 
 7. Hasil<br>
-   ![alt text](images/js4/p2.1.png)
+   ![alt text](images/js4/p2.1.png)<br>
 
     Ketiga cara diatas adalah cara yang berbeda dengan hasil yang sama<br>
 
@@ -184,8 +184,9 @@ atribut model sekaligus, menghemat waktu dan tenaga
     ```
 
 9. Hasil<br>
-   ![alt text](images/js4/p2.2.png)
-   Data yang keluar hanya username dan nama, pada level_id 1, karena hanya data dari 2 field tersebut yang diambil
+   ![alt text](images/js4/p2.2.png)<br>
+
+    Data yang keluar hanya username dan nama, pada level_id 1, karena hanya data dari 2 field tersebut yang diambil
 
 10. Mengubah script pada UserController
 
@@ -197,5 +198,30 @@ atribut model sekaligus, menghemat waktu dan tenaga
 
 11. Hasil<br>
     ![alt text](images/js4/p2.3.png)
-    Jika tidak ada hasil yang diinginkan, maka akan menjalankan fungsi *abort(404)*
+    Jika tidak ada hasil yang diinginkan, maka akan menjalankan fungsi _abort(404)_
+
+### Praktikum 2.2 - Not Found Exceptions
+
+-- Metode findOrFail dan firstOrFail akan
+mengambil hasil pertama dari kueri; namun, jika tidak ada hasil yang ditemukan, sebuah
+Illuminate\Database\Eloquent\ModelNotFoundException akan dilempar
+
+1. Mengubah script pada UserController
+
+    ```php
+    $user = UserModel::findOrFail(1);
+    ```
+
+2. Hasil<br>
+   ![alt text](images/js4/p2.4.png)
+
+3. Mengubah script pada UserController
+
+    ```php
+    $user = UserModel::where('username', 'manager9')->firstOrFail();
+    ```
+
+4. Hasil<br>
+    ![alt text](images/js4/p2.5.png)<br>
+    Di database tidak ada username 'manager9'
 
