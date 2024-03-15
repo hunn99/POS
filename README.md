@@ -250,4 +250,108 @@ Illuminate\Database\Eloquent\ModelNotFoundException akan dilempar
     ```
 
     Hasil<br>
-    ![alt text](image.png)
+    ![alt text](images/js4/P2.7.png)
+
+### Praktikum 2.4 - Retreiving or Creating Models
+
+1. Mengubah script pada UserController
+
+    ```php
+    $user = UserModel::firstOrCreate(
+        [
+            'username' => 'manager',
+            'nama' => 'Manager',
+        ],
+    );
+    ```
+
+2. Mengubah view user
+
+    ```php
+    <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Nama</th>
+        <th>ID Level Pengguna</th>
+    </tr>
+
+    <tr>
+        <td>{{$data->user_id}} </td>
+        <td>{{$data->username}} </td>
+        <td>{{$data->nama}} </td>
+        <td>{{$data->level_id}} </td>
+    </tr>
+    ```
+
+3. Hasil<br>
+   ![alt text](images/js4/p2.8.png)<br>
+   Karena username 'manager' sudah maka, firstoOrCreate hanya mengambil data yang ada
+
+4. Mengubah script pada UserController
+
+    ```php
+    $user = UserModel::firstOrCreate(
+        [
+            'username' => 'manager22',
+            'nama' => 'Manager Dua Dua',
+            'password' => Hash::make('12345'),
+            'level_id' => 2
+        ],
+    );
+    ```
+
+5. Hasil<br>
+   ![alt text](images/js4/p2.9.png)<br>
+   Karena tidak ada username 'manager22', maka firstoOrCreate memambahkan data tersebut
+
+6. Mengubah script pada UserController
+
+    ```php
+    $user = UserModel::firstOrNew(
+        [
+                'username' => 'manager',
+                'nama' => 'Manager',
+        ],
+    );
+    ```
+
+7. Hasil<br>
+   ![alt text](images/js4/p2.10.png)<br>
+   Hasilnya sama dengan firstOrCreate
+
+8. Mengubah script pada UserController
+
+    ```php
+    $user = UserModel::firstOrNew(
+        [
+            'username' => 'manager33',
+            'nama' => 'Manager Tiga Tiga',
+            'password' => Hash::make('12345'),
+            'level_id' => 2
+        ],
+    );
+    ```
+
+9. Hasil<br>
+   ![alt text](images/js4/p2.11.png)<br>
+   Username 'manager33' tidak ada di database, dan oleh firstOrNew data akan ditampilkan, namun belum disimpan ke database, oleh karena itu pada saat ditampilkan tidak ada ID nya
+
+10. Mengubah script pada UserController
+
+    ```php
+    $user = UserModel::firstOrNew(
+        [
+           'username' => 'manager33',
+            'nama' => 'Manager Tiga Tiga',
+            'password' => Hash::make('12345'),
+            'level_id' => 2
+        ],
+    );
+    $user->save();
+    ```
+
+11. Hasil<br>
+    ![alt text](image.png)<br>
+    Pada firstOrNew perlu adanya tambahan metode save untuk secara manual di simpan di database
+
+
