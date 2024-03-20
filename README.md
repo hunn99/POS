@@ -706,5 +706,99 @@ menentukan apakah suatu atribut tetap tidak berubah sejak model diambil
     ```
 
 6. Hasil<br>
-    ![alt text](images/js4/p2.25.png)<br>
-    Terlihat ada penambahan kolom level kode dan level nama yang diambil dari tabel m_level
+   ![alt text](images/js4/p2.25.png)<br>
+   Terlihat ada penambahan kolom level kode dan level nama yang diambil dari tabel m_level
+
+<br>
+<hr>
+<br>
+<br>
+
+<div align=center>
+
+# Jobsheet 5 <br> (Blade View, Web Templating(AdminLTE), Datatables)
+
+</div>
+
+<br>
+
+##
+
+### Praktikum 1 – Integrasi Laravel dengan AdminLte3
+
+1. Menjalankan command (composer require jeroennoten/laravel-adminlte), untuk mendefinisikan requirement project <br>
+   ![alt text](images/js5/p1.1.png)<br>
+
+2. Melakukan instalasi requirement project di atas dengan command (php artisan adminlte:install)<br>
+   ![alt text](images/js5/p1.2.png)<br>
+
+3. Membuat file resources/views/layout/app.blade.php<br>
+   ![alt text](images/js5/p1.3.png)<br>
+   dan mengisi dengan kode berikut:
+
+    ```php
+    @extends('adminlte::page')
+    {{-- Extend and customize the browser title --}}
+    @section('title')
+        {{ config('adminlte.title') }}
+        @hasSection('subtitle')
+            | @yield('subtitle')
+        @endif
+    @stop
+    {{-- Extend and customize the page content header --}}
+    @section('content_header')
+        @hasSection('content_header_title')
+            <h1 class="text-muted">
+                @yield('content_header_title')
+                @hasSection('content_header_subtitle')
+                    <small class="text-dark">
+                        <i class="fas fa-xs fa-angle-right text-muted"></i>
+                        @yield('content_header_subtitle')
+                    </small>
+                @endif
+            </h1>
+        @endif
+    @stop
+    {{-- Rename section content to content_body --}}
+    @section('content')
+        @yield('content_body')
+    @stop
+    {{-- Create a common footer --}}
+    @section('footer')
+        <div class="float-right">
+            Version: {{ config('app.version', '1.0.0') }}
+        </div>
+        <strong>
+            <a href="{{ config('app.company_url', '#') }}">
+                {{ config('app.company_name', 'My company') }}
+            </a>
+        </strong>
+    @stop
+    {{-- Add common Javascript/Jquery code --}}
+    @push('js')
+        <script>
+            $(document).ready(function() {
+                // Add your common script logic here...
+            });
+        </script>
+    @endpush
+    {{-- Add common CSS customizations --}}
+    @push('css')
+        <style type="text/css">
+            {{-- You can add AdminLTE customizations here --}}
+            /*
+            .card-header {
+                border-bottom: none;
+            }
+            .card-title {
+                font-weight: 600;
+            }
+            */
+        </style>
+    @endpush
+    ```
+
+4. Mengedit resources/views/welcome.blade.php dan mereplace dengan kode berikut
+
+5. Menuju ke browser
+   ![alt text](images/js5/p1.4.png)
