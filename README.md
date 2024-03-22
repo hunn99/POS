@@ -1119,3 +1119,84 @@ menentukan apakah suatu atribut tetap tidak berubah sejak model diambil
 
 15. Melihat data kategori
     ![alt text](images/js5/p2.8.png)
+
+### Praktikum 3 – Membuat form kemudian menyimpan data dalam database
+
+1. Menambahkan 2 routing
+
+    ```php
+    Route::get('/kategori/create', [KategoriController::class, 'create']);
+    Route::post('/kategori', [KategoriController::class, 'store']);
+    ```
+
+2. Menambahkan 2 function dalam KategoriController
+
+    ```php
+    public function create()
+        {
+            return view('kategori.create');
+        }
+
+        public function store(Request $request)
+        {
+            KategoriModel::create([
+                'kategori_kode' => $request->kodeKategori,
+                'kategori_nama' => $request->namaKategori,
+            ]);
+            return redirect('/kategori');
+        }
+    ```
+
+3. Membuat file create.blade di views/kategori
+
+    ```php
+    @extends('layouts.app')
+
+    {{-- Customize layout sections --}}
+
+    @section('subtitle', 'Kategori')
+    @section('content_header_title', 'Kategori')
+    @section('content_header_subtitle', 'Create')
+
+    @section('content')
+        <div class="container">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Buat Kategori Baru</h3>
+                </div>
+
+                <form action="../kategori" method="post">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="kodeKategori">Kode Kategori</label>
+                            <input type="text" class="form-control" name="kodeKategori" id="kodeKategori" placeholder="Masukkan kode kategori">
+                        </div>
+                        <div class="form-group">
+                            <label for="namaKategori">Nama Kategori</label>
+                            <input type="text" class="form-control" name="namaKategori" id="namaKategori" placeholder="Masukkan nama kategori">
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endsection
+    ```
+
+4. Melakukan pengecualian proteksi CsrfToken pada file VerifyCsrfToken
+
+    ```php
+    protected $except = [
+            '/kategori'
+    ];
+    ```
+
+5. Mengakses kategori/create<br>
+    ![alt text](images/js5/p3.1.png)
+
+6. Mengakses halaman kategori<br>
+    ![alt text](images/js5/p3.2.png)
+
