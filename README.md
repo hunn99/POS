@@ -971,9 +971,10 @@ menentukan apakah suatu atribut tetap tidak berubah sejak model diambil
 10. Mengubah Kategori Controller
 
     ```php
-    public function index(KategoriController $dataTable)
+        public function index(KategoriController $dataTable)
         {
             return $dataTable->render('kategori.index');
+        }
     ```
 
 11. Membuat folder kategori di view
@@ -1132,7 +1133,7 @@ menentukan apakah suatu atribut tetap tidak berubah sejak model diambil
 2. Menambahkan 2 function dalam KategoriController
 
     ```php
-    public function create()
+        public function create()
         {
             return view('kategori.create');
         }
@@ -1195,8 +1196,151 @@ menentukan apakah suatu atribut tetap tidak berubah sejak model diambil
     ```
 
 5. Mengakses kategori/create<br>
-    ![alt text](images/js5/p3.1.png)
+   ![alt text](images/js5/p3.1.png)
 
 6. Mengakses halaman kategori<br>
-    ![alt text](images/js5/p3.2.png)
+   ![alt text](images/js5/p3.2.png)
 
+### Tugas Praktikum
+
+1. Menambah button Add di halaman manage kategori yang mengarah ke create kategori baru
+
+    ```php
+    @section('content')
+        <div class="container">
+            <div class="card">
+                <div class="card-header">Manage Kategori</div>
+                <div class="card-body">
+                    {{ $dataTable->table() }}
+                </div>
+            </div>
+            <a href="/kategori/create">
+            <button class="btn btn-primary float-end">
+                Tambah
+            </button>
+            </a>
+        </div>
+    @endsection
+    ```
+
+    Hasil<br>
+    ![alt text](images/js5/t1.png)
+
+2. Menambahkan menu untuk halaman manage kategori di daftar menu sidebar
+
+    ```php
+    [
+                'text' => 'Manage Kategori',
+                'url' => 'kategori',
+            ],
+    ```
+    ![alt text](images/js5/t2.3.png)
+
+3. Menambahkan action edit di datatables dan buat halaman edit serta controllernya
+
+    ```php
+        public function dataTable(QueryBuilder $query): EloquentDataTable
+        {
+            return (new EloquentDataTable($query))
+                ->addColumn('action', function ($kategori) {
+                    return '<a href = "' . route('kategori.edit', $kategori->kategori_id) . '" class = "btn btn-primary">Edit</a>';
+                })
+                ->setRowId('id');
+        }
+    ```
+
+    ```php
+        public function getColumns(): array
+        {
+            return
+                [
+                    Column::make('kategori_id'),
+                    Column::make('kategori_kode'),
+                    Column::make('kategori_nama'),
+                    Column::make('created_at'),
+                    Column::make('updated_at'),
+                    Column::make('action')
+                        ->exportable(false)
+                        ->printable(false)
+                        ->width(60)
+                        ->addClass('text-center')
+                        ->title('Actions'),
+                ];
+        }
+    ```
+
+    ```php
+    @extends('layouts.app')
+
+    @section('subtitle', 'Kategori')
+    @section('content_header_title', 'Kategori')
+    @section('content_header_subtitle', 'Edit')
+
+    @section('content')
+    <div class="container">
+        <div class="card card-primary">
+            <div class="card-header">Edit Kategori</div>
+
+            <div class="card-body">
+                <form action="{{ route('kategori.update', $kategori->kategori_id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="form-group">
+                        <label for="kategori_kode">Kode Kategori:</label>
+                        <input type="text" class="form-control" id="kategori_kode" name="kategori_kode" value="{{ $kategori->kategori_kode }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="kategori_nama">Nama Kategori:</label>
+                        <input type="text" class="form-control" id="kategori_nama" name="kategori_nama" value="{{ $kategori->kategori_nama }}">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    @endsection
+    ```
+
+    ```php
+    Route::get('/kategori/{kategori}/edit', [KategoriController::class, 'edit'])->name('kategori.edit');
+    Route::put('/kategori/{kategori}/update', [KategoriController::class, 'update'])->name('kategori.update');
+    ```
+
+    ![alt text](images/js5/t2.png)<br>
+    ![alt text](images/js5/t2.1.png)<br>
+    ![alt text](images/js5/t2.2.png)<br>
+
+4. Menambahkan action delete di datatables serta controllernya
+
+    ```php
+        public function dataTable(QueryBuilder $query): EloquentDataTable
+        {
+            return (new EloquentDataTable($query))
+                ->addColumn('action', function ($kategori) {
+                    return '<a href="' . route('kategori.edit', $kategori->kategori_id) . '" class="btn btn-primary">Edit</a>
+                        <form action="' . route('kategori.destroy', $kategori->kategori_id) . '" method="POST" style="display: inline;">
+                            ' . csrf_field() . '
+                            ' . method_field('DELETE') . '
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>';
+                })
+                ->setRowId('id');
+        }
+    ```
+
+    ```php
+        public function destroy($id)
+        {
+            $kategori = KategoriModel::find($id);
+            $kategori->delete();
+
+            return redirect('/kategori');
+        }
+    ```
+
+    ![alt text](images/js5/t2.4.png)
+
+    ![alt text](images/js5/t2.5.png)

@@ -19,12 +19,24 @@ class KategoriDataTable extends DataTable
      *
      * @param QueryBuilder $query Results from query() method.
      */
-    public function dataTable(QueryBuilder $query): EloquentDataTable
-    {
-        return (new EloquentDataTable($query))
-/*             ->addColumn('action', 'kategori.action') */
-            ->setRowId('id');
-    }
+
+     public function dataTable(QueryBuilder $query): EloquentDataTable
+     {
+         return (new EloquentDataTable($query))
+             ->addColumn('action', function ($kategori) {
+                 return '<div style="display:flex">
+                             <a href="' . route('kategori.edit', $kategori->kategori_id) . '" class="btn btn-primary">Edit</a>
+                             <form action="' . route('kategori.destroy', $kategori->kategori_id) . '" method="POST">
+                                 ' . csrf_field() . '
+                                 ' . method_field('DELETE') . '
+                                 <button type="submit" class="btn btn-danger">Delete</button>
+                             </form>
+                         </div>';
+             })
+             ->setRowId('id');
+     }
+
+
 
     /**
      * Get the query source of dataTable.
@@ -40,20 +52,20 @@ class KategoriDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('kategori-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    //->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->selectStyleSingle()
-                    ->buttons([
-                        Button::make('excel'),
-                        Button::make('csv'),
-                        Button::make('pdf'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    ]);
+            ->setTableId('kategori-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            //->dom('Bfrtip')
+            ->orderBy(1)
+            ->selectStyleSingle()
+            ->buttons([
+                Button::make('excel'),
+                Button::make('csv'),
+                Button::make('pdf'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            ]);
     }
 
     /**
@@ -61,18 +73,20 @@ class KategoriDataTable extends DataTable
      */
     public function getColumns(): array
     {
-        return [
-    /*         Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'), */
-            Column::make('kategori_id'),
-            Column::make('kategori_kode'),
-            Column::make('kategori_nama'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
-        ];
+        return
+            [
+                Column::make('kategori_id'),
+                Column::make('kategori_kode'),
+                Column::make('kategori_nama'),
+                Column::make('created_at'),
+                Column::make('updated_at'),
+                Column::make('action')
+                // ->exportable(false)
+                // ->printable(false)
+                // ->width(60)
+                // ->addClass('text-center')
+                // ->title('Actions'),
+            ];
     }
 
     /**
@@ -83,5 +97,3 @@ class KategoriDataTable extends DataTable
         return 'Kategori_' . date('YmdHis');
     }
 }
-
-

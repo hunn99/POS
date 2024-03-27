@@ -17,20 +17,24 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label for="kodeKategori">Kode Kategori</label>
-                        <input type="text" class="form-control" name="kodeKategori" id="kodeKategori" placeholder="Masukkan kode kategori">
+                        <input type="text" class="form-control" name="kodeKategori" id="kodeKategori"
+                            placeholder="Masukkan kode kategori">
                     </div>
                     <div class="form-group">
                         <label for="namaKategori">Nama Kategori</label>
-                        <input type="text" class="form-control" name="namaKategori" id="namaKategori" placeholder="Masukkan nama kategori">
+                        <input type="text" class="form-control" name="namaKategori" id="namaKategori"
+                            placeholder="Masukkan nama kategori">
                     </div>
                 </div>
 
                 <div class="card-footer">
+                    <a href="/kategori" type="button" class="btn btn-outline-primary me-2">
+                        Kembali
+                    </a>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
+
         </div>
     </div>
 @endsection
-
-
