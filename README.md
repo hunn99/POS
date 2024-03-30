@@ -1234,6 +1234,7 @@ menentukan apakah suatu atribut tetap tidak berubah sejak model diambil
                 'url' => 'kategori',
             ],
     ```
+
     ![alt text](images/js5/t2.3.png)
 
 3. Menambahkan action edit di datatables dan buat halaman edit serta controllernya
@@ -1344,3 +1345,594 @@ menentukan apakah suatu atribut tetap tidak berubah sejak model diambil
     ![alt text](images/js5/t2.4.png)
 
     ![alt text](images/js5/t2.5.png)
+
+<br>
+<hr>
+<br>
+<br>
+
+<div align=center>
+
+# Jobsheet 6 <br> (Template Form (AdminLTE), Server Validation, Client Validation, CRUD)
+
+</div>
+
+<br>
+
+## A. Template Form (AdminLTE)
+
+1. Mengakses https://adminlte.io/ , lalu klik download pada source code (zip) dan memindahkannya pada folder public <br>
+   ![alt text](images/js6/p1.png)
+
+2. Mengcopy isi public/template/index2.html pada welcome.blade.php
+
+    ```php
+    <link rel="stylesheet" href="{{ asset('template/plugins/fontawesome-free/css/all.min.css') }}">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="{{ asset('template/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('template/dist/css/adminlte.min.css') }}">
+
+    <img class="animation__wobble" src="{{ asset('template/dist/img/AdminLTELogo.png') }}" alt="AdminLTELogo" height="60" width="60">
+
+    ```
+
+3. Menyesuaikan kode
+
+    ```php
+    <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
+    <script src="{{ asset('template/plugins/jquery/jquery.min.js') }}"></script>
+    <!-- Bootstrap -->
+    <script src="{{ asset('template/plugins/bootstrap/js/bootstrap.bundle.min.js') }} "></script>
+    <!-- overlayScrollbars -->
+    <script src="{{ asset('template/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}  "></script>
+    <!-- AdminLTE App -->
+    <script src="{{ asset('template/dist/js/adminlte.js') }} "></script>
+
+    <!-- PAGE PLUGINS -->
+    <!-- jQuery Mapael -->
+    <script src="{{ asset('template/plugins/jquery-mousewheel/jquery.mousewheel.js') }} "></script>
+    <script src="{{ asset('template/plugins/raphael/raphael.min.js') }} "></script>
+    <script src="{{ asset('template/plugins/jquery-mapael/jquery.mapael.min.js') }} "></script>
+    <script src="{{ asset('template/plugins/jquery-mapael/maps/usa_states.min.js') }} "></script>
+    <!-- ChartJS -->
+    <script src="{{ asset('template/plugins/chart.js/Chart.min.js') }} "></script>
+
+    <!-- AdminLTE for demo purposes -->
+    <script src="{{ asset('template/dist/js/demo.js') }} "></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="{{ asset('template/dist/js/pages/dashboard2.js') }} "></script>
+    ```
+
+4. Menjalankan browser<br>
+   ![alt text](images/js6/p1.1.png)
+
+5. Modifikasi welcome.blade
+
+    ```php
+    @extends('adminlte::page')
+
+    @section('title', 'Dashboard')
+
+    @section('content_header')
+        <h1>Dashboard</h1>
+    @stop
+
+    @section('content')
+
+        <div class="card-body">
+            <form>
+            <div class="row">
+                <div class="col-sm-6">
+                <!-- text input -->
+                <div class="form-group">
+        <label>Level id</label><input type="text" class="form-control" placeholder="id">
+                    <div>
+                </div>
+                <button type = "submit" class ="btn btn-info">Submit </button>
+                </div>
+    @stop
+
+    @section('css')
+        {{-- Add here extra stylesheets --}}
+        {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
+    @stop
+
+    @section('js')
+        <script> console.log("Hi, I'm using the Laravel-AdminLTE package!"); </script>
+    @stop
+    ```
+
+6. Hasil tampilan<br>
+   ![alt text](images/js6/p1.2.png)
+
+7. General form<br>
+   ![alt text](images/js6/p1.3.png)
+
+8. m_user<br>
+   ![alt text](images/js6/p1.4.png)
+
+9. m_level<br>
+   ![alt text](images/js6/p1.5.png)
+
+## B. Validasi Pada Seeder
+
+1. Mengedit KategoriController
+
+    ```php
+    public function create(): View
+    {
+        return view('kategori.create');
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'kategori_kode' => 'required',
+            'kategori_nama' => 'required',
+        ]);
+        return redirect('/kategori');
+    }
+    ```
+
+2. Tulis perbedaan penggunaan validate dengan validateWithBag!<br>
+
+- Metode validate() biasanya digunakan di dalam controller. Jika validasi gagal, Laravel
+secara otomatis akan mengarahkan kembali pengguna ke halaman sebelumnya dengan
+pesan error yang sesuai. Pesan error validasi akan dikirim kembali ke tampilan dan dapat
+diakses menggunakan fungsi bantuan errors().
+-> Metode validateWithBag() memberikan fleksibilitas yang lebih besar dalam menangani
+pesan error validasi. Dengan menggunakan metode ini, dapat mengontrol di mana pesan
+error validasi disimpan dan bagaimana pesan tersebut ditampilkan kepada pengguna.
+
+3. Menggunakan bail untuk menghentikan validasi pada field setelah kegagalan validasi pertama,
+   Sehingga, jika validasi untuk kode_kategori gagal, maka Laravel akan menghentikan validasi
+   dan tidak mengevaluasi aturan validasi untuk nama_kategori
+
+    ```php
+    $validated = $request->validate([
+                'kategori_kode' => 'bail|required',
+                'kategori_nama' => 'required',
+            ]);
+    ```
+
+4. Pada view/create.blade.php tambahkan code berikut agar ketika validasi gagal, kita dapat menampilkan pesan kesalahan dalam tampilan
+
+    ```php
+    @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    ```
+
+5. Hasil<br>
+   ![alt text](images/js6/p2.png)
+
+6. Menambahkan kode pada view/create.blade.php
+
+    ```php
+    <label for="kategori_kode">Kode Kategori</label>
+                        <input type="text"
+                            name="kategori_kode"
+                            id="kategori_kode"
+                            class="@error('kategori_kode') is-invalid @enderror form-control"
+                            placeholder="Kode Kategori">
+
+                        @error('kategori_kode')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+    ```
+
+    <br>
+
+    ![alt text](images/js6/p2.1.png)
+
+## C. Form Request Validation
+
+1. Membuat permintaan form dengan menuliskan pada terminal<br>
+   ![alt text](images/js6/p3.png)
+
+2. Menambahkan kode pada Http/request/StorePostRequest
+
+    ```php
+    public function rules(): array
+        {
+            return [
+                'kategori_kode' => 'required',
+                'kategori_nama' => 'required',
+            ];
+        }
+
+    public function store(StorePostRequest $request): RedirectResponse
+    {
+        // $validate = $request->validate([
+        //     'kategori_kode' => 'bail|required',
+        //     'kategori_nama' => 'required',
+        // ]);
+
+        // Retrieve the validated input data...
+        $validated = $request->validated();
+
+        // Retrieve a portion of the validated input data...
+        $validated = $request->safe()->only(['kategori_kode', 'kategori_nama']);
+        $validated = $request->safe()->except(['kategori_kode', 'kategori_nama']);
+
+        KategoriModel::create([
+            'kategori_kode' => $request->kategori_kode,
+            'kategori_nama' => $request->kategori_nama,
+        ]);
+        return redirect('/kategori');
+    }
+    ```
+
+3. Menerapkan pada m_user dan m_level<br>
+   m_user<br>
+   ![alt text](images/js6/p3.1.png)<br>
+
+    m_level<br>
+    ![alt text](images/js6/p3.2.png)<br>
+
+## D. CRUD (Create, Read, Update, Delete)
+
+1. Membuat POSController lengkap dengan resourcenya, Membuat Resource Controller dan Route
+   yang berfungsi untuk route CRUD sehingga tidak perlu repot-repot membuat masing-masing
+   route seperti post, get, delete dan update<br>
+   ![alt text](images/js6/p4.png)
+
+2. Menambahkan kode pada route
+
+    ```php
+    Route::recourse('m_user', POSController::class);
+    ```
+
+3. Mengatur model m_user
+
+    ```php
+    class UserModel extends Model
+    {
+        use HasFactory;
+
+        protected $table = 'm_user';        // mendefinisikan nama tabel yang digunakan oleh model ini
+        public $timestamps = false;
+        protected $primaryKey = 'user_id';  // mendefinisikan primary key dari tabel yang digunakan
+
+        protected $fillable = [
+            'user_id',
+            'level_id',
+            'username',
+            'nama',
+            'password',
+        ];
+    ```
+
+4. Mengatur migration m_user_table
+
+    ```php
+    public function up(): void
+        {
+            Schema::create('m_user', function (Blueprint $table) {
+                $table->id('user_id');
+                $table->unsignedBigInteger('level_id')->index(); // indexing for foreign key
+                $table->string('username', 20)->unique(); // unique untuk memastikan tidak ada username yang sama
+                $table->string('nama', 100);
+                $table->string('password');
+                $table->timestamps();
+
+                // mendefinisikan foreign key pada kolom level_id mengace pada kolom level_id di tabel m_level
+                $table->foreign('level_id')->references('level_id')->on('m_level');
+            });
+        }
+    ```
+
+5. Mengedit app/Http/Controllers/POSController.php
+
+    ```php
+    /**
+         * Display a listing of the resource.
+         */
+        public function index()
+        {
+            // fungsi eloquent menampilkan data menggunakan pagination
+            $useri = UserModel::all(); // Mengambil semua isi tabel
+            return view('m_user.index', compact('useri'))->with('i');
+        }
+
+        /**
+         * Show the form for creating a new resource.
+         */
+        public function create()
+        {
+            return view('m_user.create');
+        }
+    ```
+
+6. Membuat folder di Resources/Views/m_user dengan beberapa blade dan isian kode berikut
+
+    1. template.blade.php
+
+        ```php
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>CRUD Laravel</title>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        </head>
+        <body>
+            <div class="container">
+                @yield('content')
+            </div>
+        </body>
+        </html>
+        ```
+
+    2. index.blade.php
+
+        ```php
+        @extends('m_user/template')
+
+        @section('content')
+            <div class="row mt-5 mb-5">
+                <div class="col-lg-12 margin-tb">
+                    <div class="float-left">
+                        <h2>CRUD user</h2>
+                    </div>
+                    <div class="float-right">
+                        <a class="btn btn-success" href="{{ route('m_user.create') }}">Input User</a>
+                    </div>
+                </div>
+            </div>
+
+            @if ($message = Session::get('success'))
+                <div class="alert alert-success">
+                    <p>{{ $message }}</p>
+                </div>
+            @endif
+
+            <table class="table table-bordered">
+                <tr>
+                    <th width="20px" class="text-center">User id</th>
+                    <th width="150px" class="text-center">Level id</th>
+                    <th width="200px" class="text-center">Username</th>
+                    <th width="200px" class="text-center">Nama</th>
+                    <th width="150px" class="text-center">Password</th>
+                </tr>
+                @foreach ($useri as $m_user)
+                    <tr>
+                        <td>{{ $m_user->user_id }}</td>
+                        <td>{{ $m_user->level_id }}</td>
+                        <td>{{ $m_user->username }}</td>
+                        <td>{{ $m_user->nama }}</td>
+                        <td>{{ substr($m_user->password, 0, 10) . "..." }}</td>
+                        <td class="text-center">
+                            <form action="{{ route('m_user.destroy', $m_user->user_id) }}" method="POST">
+                                <a class="btn btn-info btn-sm" href="{{ route('m_user.show', $m_user->user_id) }}">Show</a>
+                                <a class="btn btn-primary btn-sm" href="{{ route('m_user.edit', $m_user->user_id) }}">Edit</a>
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+        @endsection
+        ```
+
+    3. create.blade.php
+
+        ```php
+        @extends('m_user/template')
+
+        @section('content')
+            <div class="row mt-5 mb-5">
+                <div class="col-lg-12 margin-tb">
+                    <div class="float-left">
+                        <h2>Membuat Daftar User</h2>
+                    </div>
+                    <div class="float-right">
+                        <a class="btn btn-secondary" href="{{ route('m_user.index') }}">Kembali</a>
+                    </div>
+                </div>
+            </div>
+
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <strong>Ops</strong> Input gagal<br><br>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form action="{{ route('m_user.store') }}" method="POST">
+                @csrf
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Username:</strong>
+                        <input type="text" name="username" class="form-control" placeholder="Masukkan username">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Nama:</strong>
+                        <input type="text" name="nama" class="form-control" placeholder="Masukkan nama">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Password:</strong>
+                        <input type="password" name="password" class="form-control" placeholder="Masukkan password">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Level ID:</strong>
+                        <input type="number" name="level_id" class="form-control" placeholder="Masukkan level id">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        @endsection
+        ```
+
+    4. show.blade.php
+
+        ```php
+        @extends('m_user/template')
+
+        @section('content')
+            <div class="row mt-5 mb-5">
+                <div class="col-lg-12 margin-tb">
+                    <div class="float-left">
+                        <h2>Show User</h2>
+                    </div>
+                    <div class="float-right">
+                        <a class="btn btn-secondary" href="{{ route('m_user.index') }}">Kembali</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>User_id:</strong>
+                        {{ $useri->user_id }}
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Level_id:</strong>
+                        {{ $useri->level_id }}
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Username:</strong>
+                        {{ $useri->username }}
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Nama:</strong>
+                        {{ $useri->nama }}
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>Password:</strong>
+                        {{ $useri->password }}
+                    </div>
+                </div>
+            </div>
+        @endsection
+        ```
+
+    5. edit.blade.php
+
+        ```php
+        @extends('m_user/template')
+
+        @section('content')
+            <div class="row mt-5 mb-5">
+                <div class="col-lg-12 margin-tb">
+                    <div class="float-left">
+                        <h2>Edit User</h2>
+                    </div>
+                    <div class="float-right">
+                        <a class="btn btn-secondary" href="{{ route('m_user.index') }}">Kembali</a>
+                    </div>
+                </div>
+            </div>
+
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <strong>Ops!</strong> Error <br><br>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form action="{{ route('m_user.update', $useri->user_id) }}" method="POST">
+                @csrf
+                @method('PUT')
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <strong>User_id:</strong>
+                            <input type="text" name="userid" value="{{ $useri->user_id }}" class="form-control" placeholder="Masukkan user id">
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <strong>Level_id:</strong>
+                            <input type="text" name="levelid" value="{{ $useri->level_id }}" class="form-control" placeholder="Masukkan level">
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <strong>Username:</strong>
+                            <input type="text" value="{{ $useri->username }}" class="form-control" name="username" placeholder="Masukkan Nomor username">
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <strong>Nama:</strong>
+                            <input type="text" value="{{ $useri->nama }}" name="nama" class="form-control" placeholder="Masukkan nama">
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <strong>Password:</strong>
+                            <input type="password" value="{{ $useri->password }}" name="password" class="form-control" placeholder="Masukkan password">
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </div>
+            </form>
+        @endsection
+        ```
+
+7. Melihat hasil<br>
+   ![alt text](images/js6/p4.1.png)
+
+## Tugas
+
+1. Coba tampilkan level_id pada halaman web tersebut dimana field ini merupakan foreign key<br>
+   ![alt text](images/js6/p4.1.png)<br>
+
+2. Modifikasi dengan tema/ template kesukaan Anda<br>
+   ![alt text](images/js6/p4.2.png)<br>
+
+3. Apa fungsi $request->validate, $error dan alert yang ada pada halaman CRUD tersebut<br>
+
+- $request->validate: Ini adalah metode dari objek $request yang digunakan untuk
+ melakukan validasi input yang diterima dari pengguna. Validasi dilakukan berdasarkan
+ aturan yang didefinisikan di dalam metode rules() pada file Form Request atau secara
+ langsung di dalam controller. Jika validasi gagal, maka metode ini akan mengembalikan
+ pesan kesalahan.
+ - $errors: Variabel ini digunakan untuk menyimpan pesan-pesan kesalahan yang dihasilkan
+ dari validasi input. Jika validasi gagal, maka pesan kesalahan akan disimpan di dalam
+ variabel ini. Ini dapat diakses di dalam tampilan Blade untuk menampilkan pesan
+ kesalahan kepada pengguna.
+ - alert: Ini adalah elemen HTML yang digunakan untuk menampilkan pesan kesalahan
+ kepada pengguna. Dalam konteks halaman CRUD, pesan kesalahan biasanya ditampilkan
+ dalam elemen alert untuk memberi tahu pengguna tentang kesalahan yang terjadi selama
+ proses validasi atau operasi CRUD.
+    
+    Dengan menggunakan fungsi $request->validate untuk validasi input dan variabel $errors untuk menangani pesan kesalahan, serta menggunakan elemen alert di dalam tampilan Blade

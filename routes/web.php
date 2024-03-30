@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
+use App\Http\Controllers\POSController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
@@ -49,3 +50,13 @@ Route::get('/kategori/{kategori}/edit', [KategoriController::class, 'edit'])->na
 Route::put('/kategori/{kategori}/update', [KategoriController::class, 'update'])->name('kategori.update');
 
 Route::delete('/kategori/{kategori}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
+
+Route::get('/m_user1', [UserController::class, 'create']);
+Route::post('/m_user1', [UserController::class, 'store']);
+
+Route::get('/m_level', [LevelController::class, 'create']);
+Route::post('/m_level', [LevelController::class, 'store']);
+
+
+Route::resource('m_user', POSController::class);
+

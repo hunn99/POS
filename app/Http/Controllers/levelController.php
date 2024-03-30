@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\LevelModel;
-
+use Illuminate\Http\RedirectResponse;
 
 class LevelController extends Controller
 {
@@ -35,5 +35,21 @@ class LevelController extends Controller
         // // coba akses model LevelModel
         // $level = LevelModel::all(); //ambil semua data dari tabel m_level
         // return view('level', ['data' => $level]);
+
+    }
+
+    public function create()
+    {
+        return view('m_level1.create');
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $validator = $request->validate([
+            'kode' => 'required',
+            'nama' => 'required',
+        ]);
+
+        return redirect('/m_user');
     }
 }

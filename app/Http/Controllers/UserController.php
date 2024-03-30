@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserModel;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
@@ -15,6 +16,22 @@ class UserController extends Controller
         return view('user', ['data' => $user]);
     }
 
+    public function create()
+    {
+        return view('m_user1.create');
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $validator = $request->validate([
+            'username' => 'required',
+            'nama' => 'required',
+            'password' => 'required',
+            'level_id' => 'required',
+        ]);
+
+        return redirect('/m_user');
+    }
     public function tambah()
     {
         return view('user_tambah');
