@@ -1478,13 +1478,13 @@ menentukan apakah suatu atribut tetap tidak berubah sejak model diambil
 
 2. Tulis perbedaan penggunaan validate dengan validateWithBag!<br>
 
-- Metode validate() biasanya digunakan di dalam controller. Jika validasi gagal, Laravel
-secara otomatis akan mengarahkan kembali pengguna ke halaman sebelumnya dengan
-pesan error yang sesuai. Pesan error validasi akan dikirim kembali ke tampilan dan dapat
-diakses menggunakan fungsi bantuan errors().
--> Metode validateWithBag() memberikan fleksibilitas yang lebih besar dalam menangani
-pesan error validasi. Dengan menggunakan metode ini, dapat mengontrol di mana pesan
-error validasi disimpan dan bagaimana pesan tersebut ditampilkan kepada pengguna.
+-   Metode validate() biasanya digunakan di dalam controller. Jika validasi gagal, Laravel
+    secara otomatis akan mengarahkan kembali pengguna ke halaman sebelumnya dengan
+    pesan error yang sesuai. Pesan error validasi akan dikirim kembali ke tampilan dan dapat
+    diakses menggunakan fungsi bantuan errors().
+    -> Metode validateWithBag() memberikan fleksibilitas yang lebih besar dalam menangani
+    pesan error validasi. Dengan menggunakan metode ini, dapat mengontrol di mana pesan
+    error validasi disimpan dan bagaimana pesan tersebut ditampilkan kepada pengguna.
 
 3. Menggunakan bail untuk menghentikan validasi pada field setelah kegagalan validasi pertama,
    Sehingga, jika validasi untuk kode_kategori gagal, maka Laravel akan menghentikan validasi
@@ -1921,18 +1921,1011 @@ error validasi disimpan dan bagaimana pesan tersebut ditampilkan kepada pengguna
 
 3. Apa fungsi $request->validate, $error dan alert yang ada pada halaman CRUD tersebut<br>
 
-- $request->validate: Ini adalah metode dari objek $request yang digunakan untuk
- melakukan validasi input yang diterima dari pengguna. Validasi dilakukan berdasarkan
- aturan yang didefinisikan di dalam metode rules() pada file Form Request atau secara
- langsung di dalam controller. Jika validasi gagal, maka metode ini akan mengembalikan
- pesan kesalahan.
- - $errors: Variabel ini digunakan untuk menyimpan pesan-pesan kesalahan yang dihasilkan
- dari validasi input. Jika validasi gagal, maka pesan kesalahan akan disimpan di dalam
- variabel ini. Ini dapat diakses di dalam tampilan Blade untuk menampilkan pesan
- kesalahan kepada pengguna.
- - alert: Ini adalah elemen HTML yang digunakan untuk menampilkan pesan kesalahan
- kepada pengguna. Dalam konteks halaman CRUD, pesan kesalahan biasanya ditampilkan
- dalam elemen alert untuk memberi tahu pengguna tentang kesalahan yang terjadi selama
- proses validasi atau operasi CRUD.
-    
+-   $request->validate: Ini adalah metode dari objek $request yang digunakan untuk
+    melakukan validasi input yang diterima dari pengguna. Validasi dilakukan berdasarkan
+    aturan yang didefinisikan di dalam metode rules() pada file Form Request atau secara
+    langsung di dalam controller. Jika validasi gagal, maka metode ini akan mengembalikan
+    pesan kesalahan.
+-   $errors: Variabel ini digunakan untuk menyimpan pesan-pesan kesalahan yang dihasilkan
+    dari validasi input. Jika validasi gagal, maka pesan kesalahan akan disimpan di dalam
+    variabel ini. Ini dapat diakses di dalam tampilan Blade untuk menampilkan pesan
+    kesalahan kepada pengguna.
+-   alert: Ini adalah elemen HTML yang digunakan untuk menampilkan pesan kesalahan
+    kepada pengguna. Dalam konteks halaman CRUD, pesan kesalahan biasanya ditampilkan
+    dalam elemen alert untuk memberi tahu pengguna tentang kesalahan yang terjadi selama
+    proses validasi atau operasi CRUD.
     Dengan menggunakan fungsi $request->validate untuk validasi input dan variabel $errors untuk menangani pesan kesalahan, serta menggunakan elemen alert di dalam tampilan Blade
+
+<br>
+<hr>
+<br>
+<br>
+
+<div align=center>
+
+# Jobsheet 7 <br> Laravel Starter Code
+
+</div>
+
+<br>
+
+### Praktikum 1 – Layouting AdminLTE
+
+1. Kita download AdminLTE v3.2.0 yang rilis pada 8 Feb 2022<br>
+   ![alt text](images/js7/p1.png)
+
+2. Setelah kita berhasil download, kita ekstrak file yang sudah di download ke folder
+   project PWL_POS/public, kemudian kita rename folder cukup menjadi adminlte<br>
+   ![alt text](images/js7/p1.1.png)
+
+3. Selanjutnya kita buka di browser dengan alamat
+   http://localhost/PWL_POS/public/adminlte maka akan muncul tampilan seperti
+   berikut<br>
+   ![alt text](images/js6/p1.1.png)
+
+4. Kita klik menu Extras > Blank Page, page inilah yang akan menjadi dasar web template
+
+5. Dari sini kita bisa melakukan layouting halaman Blank Page ini menjadi 4 element
+   seperti pada gambar berikut
+
+6. Selanjutnya kita copy page source dari halaman Blank Page, kemudia kita paste pada
+   PWL_POS/resource/view/layouts/template.blade.php (buat dulu folder layouts dan
+   file template.blade.php)
+
+7. Pada baris 1-14 file template.blade.php, kita modifikasi
+
+```php
+ <title>{{ config('app.name', 'PWL Laravel Starter Code') }}</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{{ asset('adminlte/plugins/fontawesome-free/css/all.min.css') }}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
+```
+
+10. Kemudian kita blok baris 19-153 (baris untuk element 1-header), lalu kita cut, dan  
+    paste-kan di file PWL_POS/resource/view/layouts/header.blade.php (buat dulu file
+    header.blade.php jika belum ada). Sehingga tampilan dari file template.blade.php
+    menjadi seperti berikut
+
+```php
+<!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+```
+
+11. Kita modifikasi baris 25 dan 26 pada template.blade.php
+
+```php
+    <!-- Brand Logo -->
+    <a href="{{ url('/') }}" class="brand-link">
+      <img src="{{ assets('adminlte/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light">PWL - Starter Code</span>
+    </a>
+```
+
+12. Selanjutnya kita blok baris 31-693 (baris untuk element 2-sidebar), lalu kita cut, dan  
+    paste-kan di file PWL_POS/resource/view/layouts/sidebar.blade.php (buat dulu file
+    sidebar.blade.php jika belum ada). Sehingga tampilan dari file template.blade.php
+    menjadi seperti berikut
+
+```php
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="{{ url('/') }}" class="brand-link">
+      <img src="{{ assets('adminlte/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light">PWL - Starter Code</span>
+    </a>
+
+    <!-- Sidebar -->
+    @include('layouts.sidebar')
+    <!-- /.sidebar -->
+  </aside>
+```
+
+13. Selanjutnya perhatikan baris 87-98 (baris untuk element 5-footer), lalu kita cut, dan  
+    paste-kan di file PWL_POS/resource/view/layouts/footer.blade.php (buat file
+    footer.blade.php jika belum ada). Sehingga tampilan dari file template.blade.php
+    menjadi seperti berikut
+
+```php
+</section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+    @include('layouts.footer')
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+```
+
+14. Kemudian kita modifikasi file template.blade.php baris 91-100
+
+```php
+<!-- jQuery -->
+<script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
+<!-- Bootstrap 4 -->
+<script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<!-- AdminLTE App -->
+<script src="{{ asset('/dist/js/adminlte.min.js') }}"></script>
+</body>
+</html>
+```
+
+15. Sekarang masuk pada bagian konten. Konten kita bagi menjadi 2, yaitu elemen untuk
+    breadcrumb dan elemen untuk content.
+
+16. Perhatikan file template.blade.php pada baris 38-52 kita jadikan sebagai elemen 4
+    breadcrumb. Kita blok baris 38-52 lalu kita cut, dan PWL_POS/resource/view/layouts/breadcrumb.blade.php paste-kan di file (buat file breadcrumb.blade.php jika belum ada). Sehingga tampilan dari file
+    template.blade.php menjadi seperti berikut
+
+```php
+ <!-- Sidebar -->
+    @include('layouts.sidebar')
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    @include('layouts.breadcrumb')
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Title</h3>
+```
+
+17. Layout terakhir adalah pada bagian konten. Layout untuk konten bisa kita buat dinamis,
+    sesuai dengan apa yang ingin kita sajikan pada web yang kita bangun
+
+18. Untuk content, kita akan menghapus baris 42-66 pada file template.blade.php. dan kita
+    ganti dengan kode seperti ini @yield('content')
+
+19. Hasil akhir pada file utama layouts/template.blade.php adalah seperti berikut
+
+```php
+<body class="hold-transition sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+  <!-- Navbar -->
+  @include('layouts.header')
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="{{ url('/') }}" class="brand-link">
+      <img src="{{ assets('adminlte/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light">PWL - Starter Code</span>
+    </a>
+
+    <!-- Sidebar -->
+    @include('layouts.sidebar')
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    @include('layouts.breadcrumb')
+
+    <!-- Main content -->
+    <section class="content">
+
+      @yield('content')
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+    @include('layouts.footer')
+</div>
+<!-- ./wrapper -->
+```
+
+### Praktikum 2 – Penerapan Layouting
+
+1. Kita buat file controller dengan nama WelcomeController.php
+
+```php
+class WelcomeController extends Controller
+{
+    public function index()
+    {
+        $breadcrumb = (object)[
+            'title' => 'Selamat Datang',
+            'list' => ['Home', 'Welcome']
+        ];
+
+        $activeMenu = 'dashboard';
+
+        return view('welcome', ['breadcrumb' => $breadcrumb, 'activeMenu' => $activeMenu]);
+
+    }
+}
+```
+
+2. Kita buat file pada PWL_POS/resources/views/welcome.blade.php
+
+```php
+@extends('layouts.template')
+
+@section('content')
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Halo, Apa Kabar!!!</h3>
+        <div class="card-tools"></div>
+    </div>
+    <div class="card-body">
+        Selamat datang semua, ini adalah halaman utama dari aplikasi ini.
+    </div>
+</div>
+@endsection
+```
+
+3. Kita modifikasi file PWL_POS/resources/views/layouts/breadcrumb.blade.php
+
+```php
+<section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6"><h1>{{ $breadcrumb->title }} </h1></div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            @foreach ($breadcrumb->list as $key => $value )
+            $if ($key == count($breadcrumb->list) - 1)
+                <li class="breadcrumb-item active">{{ $value}}</li>
+            @else
+                <li class="breadcrumb-item">{{$value}} </li>
+            @endif
+            @endforeach
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+```
+
+4. Kita modifikasi file PWL_POS/resources/views/layouts/sidebar.blade.php
+
+```php
+<div class="sidebar">
+    <!-- SidebarSearch Form -->
+    <div class="form-inline mt-2">
+        <div class="input-group" data-widget="sidebar-search">
+            <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+            <div class="input-group-append">
+                <button class="btn btn-sidebar">
+                    <i class="fas fa-search fa-fw"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <li class="nav-item">
+                <a href="{{ url('/') }}"
+                    class="nav-link  {{ $activeMenu == 'dashboard' ? 'active' : '' }} ">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>Dashboard</p>
+                </a>
+            </li>
+            <li class="nav-header">Data Pengguna</li>
+            <li class="nav-item">
+                <a href="{{ url('/level') }}"
+                    class="nav-link {{ $activeMenu == 'level' ? 'active' : '' }} ">
+                    <i class="nav-icon fas fa-layer-group"></i>
+                    <p>Level User</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url('/user') }}" class="nav-link {{ $activeMenu == 'user' ? 'active' : '' }}">
+                    <i class="nav-icon far fa-user"></i>
+                    <p>Data User</p>
+                </a>
+            </li>
+            <li class="nav-header">Data Barang</li>
+            <li class="nav-item">
+                <a href="{{ url('/kategori') }}"
+                    class="nav-link {{ $activeMenu == 'kategori' ? 'active' : '' }} ">
+                    <i class="nav-icon far fa-bookmark"></i>
+                    <p>Kategori Barang</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url('/barang') }}"
+                    class="nav-link {{ $activeMenu == 'barang' ? 'active' : '' }} ">
+                    <i class="nav-icon far fa-list-alt"></i>
+                    <p>Data Barang</p>
+                </a>
+            </li>
+            <li class="nav-header">Data Transaksi</li>
+            <li class="nav-item">
+                <a href="{{ url('/stok') }}"
+                    class="nav-link {{ $activeMenu == 'stok' ? 'active' : '' }} ">
+                    <i class="nav-icon fas fa-cubes"></i>
+                    <p>Stok Barang</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url('/barang') }}"
+                    class="nav-link {{ $activeMenu == 'penjualan' ? 'active' : '' }} ">
+                    <i class="nav-icon fas fa-cash-register"></i>
+                    <p>Transaksi Penjualan</p>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+```
+
+5. Kita tambahkan kode berikut router web.php
+
+```php
+Route::get('/', [WelcomeController::class, 'index']);
+```
+
+6. Hasil<br>
+   ![alt text](images/js7/p2.png)
+
+### Praktikum 3 – Implementasi jQuery Datatable di AdminLTE
+
+1. Kita modifikasi proses CRUD pada tabel m_user pada praktikum ini
+2. Kita gunakan library Yajra-datatable dengan mengetikkan perintah pada CMD  
+   composer require yajra/laravel-datatables:^10.0 atau
+   composer require yajra/laravel-datatables-oracle<br>
+
+![alt text](images/js7/p2.1.png)
+
+3. Kita modifikasi route web.php untuk proses CRUD user
+
+```php
+Route::group(['prefix' => 'user'], function(){
+    Route::get('/', [UserController::class, 'index']); //Menampilkan halaman awal user
+    Route::post('/list', [UserController::class, 'list']); //Menampilkan data user dalam bentuk json untuk datatables
+    Route::get('/create', [UserController::class, 'create']); //Menampilkan halaman form tambah user
+    Route::post('/', [UserController::class, 'store']); //Menyimpan data user baru
+    Route::get('/{id}', [UserController::class, 'show']); //Menampilkan detail user
+    Route::get('/{id}/edit', [UserController::class, 'edit']); //Menampilkan halaman form edit user
+    Route::put('/{id}', [UserController::class, 'update']); //Menyimpan perubahan data user
+    Route::delete('/{id}', [UserController::class, 'destroy']); //Menghapus data user
+});
+```
+
+4. Kita buat atau modifikasi penuh untuk UserController.php. Kita buat fungsi index()
+   untuk menampilkan halaman awal user
+
+```php
+public function index()
+    {
+        $breadscrumb = (object) [
+            'title' => 'Daftar User',
+            'list' => ['Home', 'User']
+        ];
+
+        $page = (object) [
+            'title' => 'Daftar user yang terdaftar dalam sistem'
+        ];
+
+        $activeMenu = 'user';
+        return view('user.index', ['breadcrumb' => $breadscrumb, 'page' => $page, 'activeMenu' => $activeMenu]);
+    }
+```
+
+5. Lalu kita buat view pada PWL_POS/resources/views/user/index.blade.php
+
+```php
+@extends('layouts.template')
+
+@section('content')
+    <div class="card card-outline card-primary">
+        <div class="card-header">
+            <h3 class="card-title">{{ $page->title }}</h3>
+            <div class="card-tools">
+                <a class="btn btn-sm btn-primary mt-1" href="{{ url('user/create') }}">Tambah</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped table-hover table-sm" id="table_user">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Nama</th>
+                        <th>Level
+                            Pengguna</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+@endsection
+
+@push('css')
+@endpush
+
+@push('js')
+    <script>
+        $(document).ready(function() {
+            var dataUser = $('#table_user').DataTable({
+                serverSide: true, // serverSide: true, jika ingin menggunakan server
+                side processing
+                ajax: {
+                    "url": "{{ url('user/list') }}",
+                    "dataType": "json",
+                    "type": "POST"
+                },
+                columns: [{
+                    data: "DT_RowIndex", // nomor urut dari laravel datatable
+                    addIndexColumn()
+                    className: "text-center",
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: "username",
+                    className: "",
+                    orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
+                    searchable: true // searchable: true, jika ingin kolom ini bisa dicari
+                }, {
+                    data: "nama",
+                    className: "",
+                    orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
+                    searchable: true // searchable: true, jika ingin kolom ini bisa dicari
+                }, {
+                    data: "level.level_nama",
+                    className: "",
+                    orderable: false, // orderable: true, jika ingin kolom ini bisa diurutkan
+                    searchable: false // searchable: true, jika ingin kolom ini bisa dicari
+                }, {
+                    data: "aksi",
+                    className: "",
+                    orderable: false, // orderable: true, jika ingin kolom ini bisa diurutkan
+                    searchable: false // searchable: true, jika ingin kolom ini bisa dicari
+                }]
+            });
+        });
+    </script>
+@endpush
+```
+
+6. Kemudian kita modifikasi file template.blade.php untuk menambahkan library jquery
+   datatables dari template AdminLTE yang kita download dan berada di folder public<br>
+   ![alt text](images/js7/p3.png)
+
+7. Untuk bisa menangkap request data untuk datatable, kita buat fungsi list() pada
+   UserController.php seperti berikut<br>
+
+```php
+// Ambil data user dalam bentuk json untuk datatables
+public function list(Request $request)
+{
+    $users = UserModel::select('user_id', 'username', 'nama', 'level_id')
+                ->with('level');
+
+    return DataTables::of($users)
+        ->addIndexColumn() // menambahkan kolom index / no urut (default nama
+kolom: DT_RowIndex)
+        ->addColumn('aksi', function ($user) {  // menambahkan kolom aksi
+            $btn  = '<a href="'.url('/user/' . $user->user_id).'" class="btn btn
+info btn-sm">Detail</a> ';
+            $btn .= '<a href="'.url('/user/' . $user->user_id . '/edit').'"
+class="btn btn-warning btn-sm">Edit</a> ';
+            $btn .= '<form class="d-inline-block" method="POST" action="'.
+url('/user/'.$user->user_id).'">'
+                    . csrf_field() . method_field('DELETE') .
+                    '<button type="submit" class="btn btn-danger btn-sm"
+onclick="return confirm(\'Apakah Anda yakit menghapus data
+ini?\');">Hapus</button></form>';
+            return $btn;
+        })
+        ->rawColumns(['aksi']) // memberitahu bahwa kolom aksi adalah html
+        ->make(true);
+}
+```
+
+8. Hasil<br>
+   ![alt text](images/js7/p3.1.png)
+
+9. Selanjutnya kita modifikasi UserController.php untuk form tambah data user
+
+```php
+ public function create()
+    {
+        $breadcrumb = (object)[
+            'title' => 'Tambah User',
+            'list' => ['Home', 'User', 'Tambah']
+        ];
+
+        $page = (object)[
+            'title' => 'Tambah User Baru'
+        ];
+
+        $level = LevelModel::all(); //ambil data level untuk ditampilkan di form
+        $activeMenu = 'user'; //set menu yang sedang aktif
+
+        return view('user.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'level' => $level, 'activeMenu' => $activeMenu]);
+
+    }
+```
+
+10. Sekarang kita buat form untuk menambah data, kita buat file PWL_POS/resources/views/user/create.blade.php
+
+```php
+@extends('layouts.template')
+
+@section('content')
+    <div class="card card-outline card-primary">
+        <div class="card-header">
+            <h3 class="card-title">{{ $page->title }}</h3>
+            <div class="card-tools"></div>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url('user') }}" class="form-horizontal">
+                @csrf
+                <div class="form-group row">
+                    <label class="col-1 control-label col-form-label">Level</label>
+                    <div class="col-11">
+                        <select class="form-control" id="level_id" name="level_id" required>
+                            <option value="">- Pilih Level -</option>
+                            @foreach ($level as $item)
+                                <option value="{{ $item->level_id }}">{{ $item->level_nama }}</option>
+                            @endforeach
+                        </select>
+                        @error('level_id')
+                            <small class="form-text text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-1 control-label col-form-label">Username</label>
+                    <div class="col-11">
+                        <input type="text" class="form-control" id="username" name="username"
+                            value="{{ old('username') }}" required>
+                        @error('username')
+                            <small class="form-text text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-1 control-label col-form-label">Nama</label>
+                    <div class="col-11">
+                        <input type="text" class="form-control" id="nama" name="nama" value="{{ old('nama') }}"
+                            required>
+                        @error('nama')
+                            <small class="form-text text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-1 control-label col-form-label">Password</label>
+                    <div class="col-11">
+                        <input type="password" class="form-control" id="password" name="password" required>
+                        @error('password')
+                            <small class="form-text text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-1 control-label col-form-label"></label>
+                    <div class="col-11">
+                        <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+                        <a class="btn btn-sm btn-default ml-1" href="{{ url('user') }}">Kembali</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+@endsection
+@push('css')
+@endpush
+@push('js')
+@endpush
+```
+
+11. Kemudian untuk bisa menng-handle data yang akan disimpan ke database, kita buat
+    fungsi store() di UserController.php
+
+```php
+public function store(Request $request)
+    {
+        $request->validate([
+            //username harus diisi, berupa string, minimal 3 karakter, dan bernilai unik di tabel m_user kolom username
+            'username' => 'required|string|min:3|unique:m_user, username',
+            'nama' => 'required|string|max:100', // nama harus diisi, berupa string, dan maksimal 100 karakter
+            'password' => 'required|min:5', // password harus diisi dan minimal 5 karakter
+            'level_id' => 'required|integer' // level_id harus diisi dan berupa angka
+        ]);
+
+        UserModel::create([
+            'username' => $request->username,
+            'nama' => $request->nama,
+            'password' => bcrypt($request->password), // password dienkripsi sebelum disimpan
+            'level_id' => $request->level_id
+        ]);
+
+        return redirect('/user')->with('success', 'Data user berhasil disimpan');
+    }
+```
+
+12. Sekarang coba kalian buka form tambah data user dengan klik tombol tambah. Amati
+    dan pelajari..!!!
+    ![alt text](images/js7/p3.2.png)
+    ![alt text](images/js7/p3.3.png)
+
+13. Selanjutnya, kita masuk pada bagian menampilkan detail data user (klik tombol detail )
+    pada halaman user. Route yang bertugas untuk menangkap request detail adalah
+    -> route menampilkan detail
+
+14. Jadi kita buat/modifikasi fungsi show() pada UserController.php seperti berikut
+
+```php
+public function show(string $id)
+    {
+        $user = UserModel::with('level')->find($id);
+
+        $breadcrumb = (object) [
+            'title' => 'Detail User',
+            'list' => ['Home', 'User', 'Detail']
+        ];
+
+        $page = (object) [
+            'title' => 'Detail user'
+        ];
+
+        $activeMenu = 'user'; //set menu yang sedang aktif
+
+        return view('user.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'user' => $user, 'activeMenu' => $activeMenu]);
+    }
+```
+
+15. Kemudian kita buat view di PWL_POS/resources/views/user/show.blade.php
+
+```php
+@extends('layouts.template')
+
+@section('content')
+    <div class="card card-outline card-primary">
+        <div class="card-header">
+            <h3 class="card-title">{{ $page->title }}</h3>
+            <div class="card-tools"></div>
+        </div>
+        <div class="card-body">
+            @empty($user)
+                <div class="alert alert-danger alert-dismissible">
+                    <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
+                    Data yang Anda cari tidak ditemukan.
+                </div>
+            @else
+                <table class="table table-bordered table-striped table-hover table sm">
+                    <tr>
+                        <th>ID</th>
+                        <td>{{ $user->user_id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Level</th>
+                        <td>{{ $user->level->level_nama }}</td>
+                    </tr>
+                    <tr>
+                        <th>Username</th>
+                        <td>{{ $user->username }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nama</th>
+                        <td>{{ $user->nama }}</td>
+                    </tr>
+                    <tr>
+                        <th>Password</th>
+                        <td>********</td>
+                    </tr>
+                </table>
+            @endempty
+            <a href="{{ url('user') }}" class="btn btn-sm btn-default mt 2">Kembali</a>
+        </div>
+    </div>
+@endsection
+
+@push('css')
+@endpush
+
+@push('js')
+@endpush
+```
+
+16. Sekarang kalian coba untuk melihat detail data user di browser, dan coba untuk
+    mengetikkan id yang salah contoh http://localhost/PWL_POS/public/user/100 amati
+    apa yang terjadi, dan laporkan!!!<br>
+    ![alt text](images/js7/p3.4.png)<br>
+    ![alt text](images/js7/p3.5.png)
+
+17. Selanjutnya, kita masuk pada bagian untuk memodifikasi data user. Route yang bertugas
+    untuk menangkap request edit adalah
+
+```php
+    Route::get('/{id}/edit', [UserController::class, 'edit']); //Menampilkan halaman form edit user
+    Route::put('/{id}', [UserController::class, 'update']); //Menyimpan perubahan data user
+```
+
+18. Jadi kita buat fungsi edit() dan update() pada UserController.php
+
+```php
+public function edit(string $id)
+    {
+        $user = UserModel::find($id);
+        $level = LevelModel::all();
+
+        $breadcrumb = (object) [
+            'title' => 'Edit User',
+            'list' => ['Home', 'User', 'Edit']
+        ];
+
+        $page = (object) [
+            'title' => 'Edit User'
+        ];
+
+        $activeMenu = 'user'; //set menu yang sedang aktif
+
+        return view('user.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'user' => $user, 'level' => $level, 'activeMenu' => $activeMenu]);
+    }
+
+    //Menyimpan perubahan data user
+    public function update(Request $request, string $id)
+    {
+        $request->validate([
+            //username harus diisi, berupa string, minimal 3 karakter, dan bernilai unik di tabel m_user kolom username
+            'username' => 'required|string|min:3|unique:m_user,username,'.$id.',user_id',
+            'nama' => 'required|string|max:100', // nama harus diisi, berupa string, dan maksimal 100 karakter
+            'password' => 'required|min:5', // password harus diisi dan minimal 5 karakter
+            'level_id' => 'required|integer' // level_id harus diisi dan berupa angka
+        ]);
+
+        UserModel::find($id)->update([
+            'username' => $request->username,
+            'nama' => $request->nama,
+            'password' => $request->password ? bcrypt($request->password) : UserModel::find($id)->password,
+            'level_id' => $request->level_id
+        ]);
+
+        return redirect('/user')->with('success', 'Data user berhasil diubah');
+    }
+```
+
+19. Selanjutnya, kita buat view untuk melakukan proses edit data user di PWL_POS/resources/views/user/edit.blade.php
+
+```php
+@extends('layouts.template')
+
+@section('content')
+    <div class="card card-outline card-primary">
+        <div class="card-header">
+            <h3 class="card-title">{{ $page->title }}</h3>
+            <div class="card-tools"></div>
+        </div>
+        <div class="card-body">
+            @empty($user)
+                <div class="alert alert-danger alert-dismissible">
+                    <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
+                    Data yang Anda cari tidak ditemukan.
+                </div>
+                <a href="{{ url('user') }}" class="btn btn-sm btn-default mt
+2">Kembali</a>
+            @else
+                <form method="POST" action="{{ url('/user/' . $user->user_id) }}" class="form-horizontal">
+                    @csrf
+                    {!! method_field('PUT') !!} <!-- tambahkan baris ini untuk proses edit
+        yang butuh method PUT -->
+                    <div class="form-group row">
+                        <label class="col-1 control-label col-form-label">Level</label>
+                        <div class="col-11">
+                            <select class="form-control" id="level_id" name="level_id" required>
+                                <option value="">- Pilih Level -</option>
+                                @foreach ($level as $item)
+                                    <option value="{{ $item->level_id }}" @if ($item->level_id == $user->level_id) selected @endif>
+                                        {{ $item->level_nama }}</option>
+                                @endforeach
+                            </select>
+                            @error('level_id')
+                                <small class="form-text text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-1 control-label col-form-label">Username</label>
+                        <div class="col-11">
+                            <input type="text" class="form-control" id="username" name="username"
+                                value="{{ old('username', $user->username) }}" required>
+                            @error('username')
+                                <small class="form-text text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-1 control-label col-form-label">Nama</label>
+                        <div class="col-11">
+                            <input type="text" class="form-control" id="nama" name="nama"
+                                value="{{ old('nama', $user->nama) }}" required>
+                            @error('nama')
+                                <small class="form-text text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-1 control-label col-form-label">Password</label>
+                        <div class="col-11">
+                            <input type="password" class="form-control" id="password" name="password">
+                            @error('password')
+                                <small class="form-text text-danger">{{ $message }}</small>
+                            @else
+                                <small class="form-text text-muted">Abaikan (jangan diisi) jika
+                                    tidak ingin mengganti password user.</small>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-1 control-label col-form-label"></label>
+                        <div class="col-11">
+                            <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+                            <a class="btn btn-sm btn-default ml-1" href="{{ url('user') }}">Kembali</a>
+                        </div>
+                    </div>
+                </form>
+            @endempty
+        </div>
+    </div>
+@endsection
+
+@push('css')
+@endpush
+@push('js')
+@endpush
+```
+
+20. Sekarang kalian coba untuk mengedit data user di browser, amati, pahami, dan laporkan!<br>
+    ![alt text](images/js7/p3.6.png)
+    ![alt text](images/js7/p3.7.png)
+
+21. Selanjutnya kita akan membuat penanganan untuk tombol hapus. Router web.php yang
+    berfungsi untuk menangkap request hapus dengan method DETELE adalah
+
+```php
+Route::delete('/{id}', [UserController::class, 'destroy']);
+```
+
+22. Jadi kita buat fungsi destroy() pada UserController.php
+
+```php
+ public function destroy(string $id)
+    {
+        $check = UserModel::find($id);
+        if($check){ //mengecek apakah data user dengan id yang dimaksud ada atau tidak
+            return redirect('/user')->with('error', 'Data user tidak ditemukan');
+        }
+
+        try{
+            UserModel::destroy($id); //hapus data level
+
+            return redirect('/user')->with('success', 'Data user berhasil dihapus');
+        }catch (\Illuminate\Database\QueryException $e){
+
+            //jika terjadi error ketika menghapus data, redirect kembali ke halaman dengan membawa pesan error
+            return redirect('/user')->with('error', 'Data user gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini');
+        }
+    }
+```
+
+23. Selanjutnya kita modifikasi file PWL_POS/resources/views/user/index.blade.php
+    untuk menambahkan tampilan jika ada pesan error
+
+```php
+    @if (session('success'))
+            <div class="alert alert-succes">{{ session('success') }} </div>
+            @endif
+            @if (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
+```
+
+24. Kemudian jalankan browser untuk menghapus salah satu data user. Amati dan laporkan!<br>
+    ![alt text](images/js7/p3.8.png)
+    ![alt text](images/js7/p3.9.png)
+
+
+### Praktikum 4 – Implementasi Filtering Datatables
+
+1. Kita modifikasi fungsi index() di UserController.php untuk menambahkan data yang 
+ingin dijadikan kategori untuk data filtering
+
+```php
+ $level = LevelModel::all(); //ambil data level untuk ffiltering lvel
+
+        return view('user.index', ['breadcrumb' => $breadscrumb, 'page' => $page, 'level' => $level, 'activeMenu' => $activeMenu]);
+```
+
+2. Kemudian kita modifikasi view untuk menampilkan data filtering pada 
+PWL_POS/resources/views/user/index.blade.php 
+
+```php
+<div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-1 control-label col-form-label">Filter:</label>
+                        <div class="col-3">
+                            <select name="level_id" id="level_id" class="form-control" required>
+                                <option value="">- Semua -</option>
+                                @foreach ($level as $item )
+                                    <option value="{{ $item->level_id }}">{{$item->level_nama}} </option>
+                                @endforeach
+                            </select>
+                            <small class="form-text text-muted">Level Pengguna</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+```
+
+3. Selanjutnya, tetap pada view index.blade.php, kita tambahkan kode berikut pada 
+deklarasi ajax di datatable. Kode ini digunakan untuk mengirimkan data untuk filtering 
+
+```php
+ "data" : function(d){
+                        d.level_id = $('#level_id').val();
+                    }
+```
+
+4. Kemudian kita edit  pada bagian akhir script @push(‘js’) untuk menambahkan listener 
+jika data filtering dipilih
+
+```php
+ $('#level_id').on('change', function(){
+                dataUser.ajax.reload();
+            });
+```
+
+5. Tahapan akhir adalah memodifikasi fungsi list() pada UserController.php yang 
+digunakan untuk menampilkan data pada datatable
+
+```php
+if ($request->level_id){
+            $users->where('level_id', $request->level_id);
+        }
+```
+
+6. Bagian akhir adalah kita coba jalankan di browser dengan akses menu user, maka akan 
+tampil seperti berikut<br>
+    ![alt text](images/js7/p4.png)
+
+
+### Pertanyaan
+1. Apa perbedaan frontend template dengan backend template?
+    Jawab:
+    - Frontend Template: Fokus pada pengembangan antarmuka dan elemen visual aplikasi yang dilihat oleh pengguna. Ini termasuk desain tampilan, interaksi, dan responsivitas.
+    - Backend Template: Lebih mengarah ke pengoptimalan fungsionalitas, pengelolaan basis data, dan logika pemrograman dari sisi server. Backend template berhubungan dengan bagian yang tidak terlihat oleh pengguna, seperti pemrosesan data dan keamanan
+
+2. Apakah layouting itu penting dalam membangun sebuah website?
+    Jawab:
+    Penting, karena dapat meningkatkan tampilan, mempermudah akses pengunjung, mempermudah penyampaian informasi, dan mempermudah pemeliharaan website
+
+3. Jelaskan fungsi dari komponen laravel blade berikut : @include(), @extend(), @section(), @push(), @yield(), dan @stack() 
+    Jawab:
+    - @include(‘view_name’): Menggabungkan view lain ke dalam view saat rendering. Berguna untuk menyertakan bagian-bagian yang sering digunakan di beberapa halaman.
+    - @extends(‘layout_name’): Menandakan bahwa kita menggunakan layout tertentu sebagai template website. Layout ini berisi desain tampilan website yang dibangun sesuai kebutuhan pengguna.
+    - @section(‘content’): Menentukan bagian konten pada layout. Konten yang didefinisikan di sini akan diisi oleh view yang meng-extend layout tersebut.
+    - @push(‘scripts’): Menambahkan kode JavaScript ke bagian head atau footer layout.
+    - @yield(‘section_name’): Menampilkan konten yang didefinisikan di bagian @section dengan nama tertentu.
+    - @stack(‘scripts’): Menyimpan kode JavaScript untuk digunakan di bagian head atau footer layout
+
+4. Apa fungsi dan tujuan dari variable $activeMenu ? 
+    Untuk melacak menu aktif atau status halaman yang sedang ditampilkan
