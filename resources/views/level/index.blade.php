@@ -5,7 +5,7 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
-                <a class="btn btn-sm btn-primary mt-1" href="{{ url('kategori/create') }}">Tambah</a>
+                <a class="btn btn-sm btn-primary mt-1" href="{{ url('level/create') }}">Tambah</a>
             </div>
         </div>
         <div class="card-body">
@@ -15,36 +15,15 @@
             @if (session('error'))
                 <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
-            <table class="table table-bordered table-striped table-hover table-sm" id="table_kategori">
+            <table class="table table-bordered table-striped table-hover table-sm" id="table_level">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>kategori Kode</th>
-                        <th>kategori Nama</th>
+                        <th>Level Kode</th>
+                        <th>Level Nama</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
-                @foreach ($data as $d)
-                    <tr>
-                        <td>{{ $d->kategori_id }} </td>
-                        <td>{{ $d->kategori_kode }} </td>
-                        <td>{{ $d->kategori_nama }} </td>
-                        <td class="">
-                            <div class="d-flex">
-                                <a href="/kategori/{{ $d->kategori_id }}/edit" class="btn btn-success mr-1">edit</a>
-                                <a href="/kategori/{{ $d->kategori_id }}" class="btn btn-primary mr-1">Detail</a>
-                                <form action="{{ url('kategori/' . $d->kategori_id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-danger" type="submit"
-                                        onclick="return confirm('Apakah anda ingin menghapus data ini ?')">Delete</button>
-                                </form>
-
-                            </div>
-
-                        </td>
-                    </tr>
-                @endforeach
             </table>
         </div>
     </div>
@@ -56,25 +35,28 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            var datakategori = $('#table_kategori').DataTable({
-                // serverSide: true, // serverSide: true, jika ingin menggunakan server
-                // ajax: {
-                //     "url": "{{ url('kategori/list') }}",
-                //     "dataType": "json",
-                //     "type": "POST",
-                // },
+            var dataLevel = $('#table_level').DataTable({
+                serverSide: true, // serverSide: true, jika ingin menggunakan server
+                ajax: {
+                    "url": "{{ url('level/list') }}",
+                    "dataType": "json",
+                    "type": "POST",
+                    // "data": function(d) {
+                    //     d.level_id = $('#level_id').val();
+                    // }
+                },
                 columns: [{
                     data: "DT_RowIndex", // nomor urut dari laravel datatable
                     className: "text-center",
                     orderable: false,
                     searchable: false
                 }, {
-                    data: "kategori_kode",
+                    data: "level_kode",
                     className: "",
                     orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
                     searchable: true // searchable: true, jika ingin kolom ini bisa dicari
                 }, {
-                    data: "kategori_nama",
+                    data: "level_nama",
                     className: "",
                     orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
                     searchable: true // searchable: true, jika ingin kolom ini bisa dicari
@@ -85,7 +67,7 @@
                     searchable: false // searchable: true, jika ingin kolom ini bisa dicari
                 }]
             });
-            // $('#kategori_id').on('change', function() {
+            // $('#level_id').on('change', function() {
             //     dataUser.ajax.reload();
             // });
         });
