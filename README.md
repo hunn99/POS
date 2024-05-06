@@ -2842,11 +2842,10 @@ Route::delete('/{id}', [UserController::class, 'destroy']);
     ![alt text](images/js7/p3.8.png)
     ![alt text](images/js7/p3.9.png)
 
-
 ### Praktikum 4 – Implementasi Filtering Datatables
 
-1. Kita modifikasi fungsi index() di UserController.php untuk menambahkan data yang 
-ingin dijadikan kategori untuk data filtering
+1. Kita modifikasi fungsi index() di UserController.php untuk menambahkan data yang
+   ingin dijadikan kategori untuk data filtering
 
 ```php
  $level = LevelModel::all(); //ambil data level untuk ffiltering lvel
@@ -2854,8 +2853,8 @@ ingin dijadikan kategori untuk data filtering
         return view('user.index', ['breadcrumb' => $breadscrumb, 'page' => $page, 'level' => $level, 'activeMenu' => $activeMenu]);
 ```
 
-2. Kemudian kita modifikasi view untuk menampilkan data filtering pada 
-PWL_POS/resources/views/user/index.blade.php 
+2. Kemudian kita modifikasi view untuk menampilkan data filtering pada
+   PWL_POS/resources/views/user/index.blade.php
 
 ```php
 <div class="row">
@@ -2876,8 +2875,8 @@ PWL_POS/resources/views/user/index.blade.php
             </div>
 ```
 
-3. Selanjutnya, tetap pada view index.blade.php, kita tambahkan kode berikut pada 
-deklarasi ajax di datatable. Kode ini digunakan untuk mengirimkan data untuk filtering 
+3. Selanjutnya, tetap pada view index.blade.php, kita tambahkan kode berikut pada
+   deklarasi ajax di datatable. Kode ini digunakan untuk mengirimkan data untuk filtering
 
 ```php
  "data" : function(d){
@@ -2885,8 +2884,8 @@ deklarasi ajax di datatable. Kode ini digunakan untuk mengirimkan data untuk fil
                     }
 ```
 
-4. Kemudian kita edit  pada bagian akhir script @push(‘js’) untuk menambahkan listener 
-jika data filtering dipilih
+4. Kemudian kita edit pada bagian akhir script @push(‘js’) untuk menambahkan listener
+   jika data filtering dipilih
 
 ```php
  $('#level_id').on('change', function(){
@@ -2894,8 +2893,8 @@ jika data filtering dipilih
             });
 ```
 
-5. Tahapan akhir adalah memodifikasi fungsi list() pada UserController.php yang 
-digunakan untuk menampilkan data pada datatable
+5. Tahapan akhir adalah memodifikasi fungsi list() pada UserController.php yang
+   digunakan untuk menampilkan data pada datatable
 
 ```php
 if ($request->level_id){
@@ -2903,23 +2902,25 @@ if ($request->level_id){
         }
 ```
 
-6. Bagian akhir adalah kita coba jalankan di browser dengan akses menu user, maka akan 
-tampil seperti berikut<br>
-    ![alt text](images/js7/p4.png)
-
+6. Bagian akhir adalah kita coba jalankan di browser dengan akses menu user, maka akan
+   tampil seperti berikut<br>
+   ![alt text](images/js7/p4.png)
 
 ### Pertanyaan
+
 1. Apa perbedaan frontend template dengan backend template?
-    Jawab:
+   Jawab:
+
     - Frontend Template: Fokus pada pengembangan antarmuka dan elemen visual aplikasi yang dilihat oleh pengguna. Ini termasuk desain tampilan, interaksi, dan responsivitas.
     - Backend Template: Lebih mengarah ke pengoptimalan fungsionalitas, pengelolaan basis data, dan logika pemrograman dari sisi server. Backend template berhubungan dengan bagian yang tidak terlihat oleh pengguna, seperti pemrosesan data dan keamanan
 
 2. Apakah layouting itu penting dalam membangun sebuah website?
-    Jawab:
-    Penting, karena dapat meningkatkan tampilan, mempermudah akses pengunjung, mempermudah penyampaian informasi, dan mempermudah pemeliharaan website
+   Jawab:
+   Penting, karena dapat meningkatkan tampilan, mempermudah akses pengunjung, mempermudah penyampaian informasi, dan mempermudah pemeliharaan website
 
-3. Jelaskan fungsi dari komponen laravel blade berikut : @include(), @extend(), @section(), @push(), @yield(), dan @stack() 
-    Jawab:
+3. Jelaskan fungsi dari komponen laravel blade berikut : @include(), @extend(), @section(), @push(), @yield(), dan @stack()
+   Jawab:
+
     - @include(‘view_name’): Menggabungkan view lain ke dalam view saat rendering. Berguna untuk menyertakan bagian-bagian yang sering digunakan di beberapa halaman.
     - @extends(‘layout_name’): Menandakan bahwa kita menggunakan layout tertentu sebagai template website. Layout ini berisi desain tampilan website yang dibangun sesuai kebutuhan pengguna.
     - @section(‘content’): Menentukan bagian konten pada layout. Konten yang didefinisikan di sini akan diisi oleh view yang meng-extend layout tersebut.
@@ -2927,5 +2928,628 @@ tampil seperti berikut<br>
     - @yield(‘section_name’): Menampilkan konten yang didefinisikan di bagian @section dengan nama tertentu.
     - @stack(‘scripts’): Menyimpan kode JavaScript untuk digunakan di bagian head atau footer layout
 
-4. Apa fungsi dan tujuan dari variable $activeMenu ? 
-    Untuk melacak menu aktif atau status halaman yang sedang ditampilkan
+4. Apa fungsi dan tujuan dari variable $activeMenu ?
+   Untuk melacak menu aktif atau status halaman yang sedang ditampilkan
+
+<br>
+<hr>
+<br>
+<br>
+
+<div align=center>
+
+# Jobsheet 9 <br> AUTHENTICATION, MIDDLEWARE
+
+</div>
+
+<br>
+
+### Praktikum 1 – Auth dan Middleware
+
+1. Setting file pada config/auth.php
+
+    ```php
+    'providers' => [
+            'users' => [
+                'driver' => 'eloquent',
+                'model' => App\Models\UserModel::class,
+            ],
+    ```
+
+2. Membuat middleware dengan perintah pada cmd atau terminal<br>
+   ![alt text](images/js9/p1.png)
+
+3. Meletakkan di function handle()
+
+    ```php
+    class Cek_Login
+    {
+        /**
+         * Handle an incoming request.
+         *
+         * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+         */
+        public function handle(Request $request, Closure $next, $roles): Response
+        {
+            // cek sudah login atau belum. jika belum kembali ke halaman login
+            if (Auth::check()) {
+                return redirect('login');
+            }
+            // simpan data user pada variabel user
+            $user = Auth::user();
+
+            //jika user memiliki level sesuai pada kolom pada lanjutan request
+            if ($user->level_id == $roles){
+                return $next($request);
+            }
+
+            return redirect('login')->with('error', 'Maaf anda tidak memiliki akses');
+        }
+    }
+    ```
+
+4. Meregistrasikan pada kernel.php. Agar middleware dapat dibaca oleh sistem
+
+    ```php
+    protected $middlewareAliases = [
+            ...
+            // tambahkan middleware alias dengan nama cek_login
+            'cek_login' => \App\Http\Middleware\Cek_Login::class,
+        ];
+    ```
+
+5. Membuat controller auth<br>
+   ![alt text](images/js9/p1.2.png)
+
+6. Membuat kode AuthController.php
+
+    ```php
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Models\UserModel;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\Hash;
+    use Illuminate\Support\Facades\Validator;
+
+    class AuthController extends Controller
+    {
+        public function index()
+        {
+            // kita ambil data user lalu simpan pada variabel $user
+            $user = Auth::user();
+
+            // kondisi jika usernya ada
+            if ($user) {
+                // jika usernya memiliki level admin
+                if ($user->level_id == '1') {
+                    return redirect()->intended('admin');
+                }
+                // jika usernya memiliki level manager
+                else if ($user->level == '2') {
+                    return redirect()->intended('manager');
+                }
+            }
+            return view('login');
+        }
+
+        public function proses_login(Request $request)
+        {
+            // kita buat validasi pada saat tombol login diklik
+            // validasinya username & password wajib diisi
+            $request->validate([
+                'username' => 'required',
+                'password' => 'required'
+            ]);
+
+            // ambil data request username & password saja
+            $credential = $request->only('username', 'password');
+
+            // cek jika data username dan password valid (sesuai) dengan data
+            if (Auth::attempt($credential)) {
+                // kalau berhasil simpan data usernya di variabel $user
+                $user = Auth::user();
+
+                // cek lagi jika level usernya biasa maka arahkan ke halaman user
+                if ($user->level_id == '1') {
+                    // dd($user->level_id);
+                    return redirect()->intended('admin');
+                }
+                // tapi jika level usernya user biasa maka arahkan ke halaman user
+                else if ($user->level_id == '2') {
+                    return redirect()->intended('manager');
+                }
+                // jika belum ada role maka ke halaman /
+                return redirect()->intended('/');
+            }
+            // jika tidak ada data user yang valid maka kembalikan lagi ke halaman login
+            // pastikan kirim pesan error juga kalau login gagal
+            return redirect('login')
+                ->withInput()
+                ->withErrors(['login_gagal' => 'Pastikan kembali username dan password yang dimasukkan sudah benar' ]);
+        }
+
+        public function register()
+        {
+            // tampilkan view register
+            return view('register');
+        }
+
+        // aksi form register
+        public function proses_register(Request $request)
+        {
+            // kita buat validasi untuk proses register
+            // validasinya yaitu semua field wajib diisi
+            // validasin username itu harus unique atau tidak boleh dupilikat username
+            $validator = Validator::make($request->all(), [
+                'nama' => 'required',
+                'username' => 'required|unique:m_user',
+                'password' => 'required',
+            ]);
+
+            // kalau gagal kembali ke halaman register dengan munculkan pesan error
+            if ($validator->fails()) {
+                return redirect('/register')
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+            // kalau berhasil isi level & hash password agar secure
+            $request['level_id'] = '2';
+            $request['password'] = Hash::make($request->password);
+
+            // masukkan semua data pada request ke table user
+            UserModel::create($request->all());
+
+            // kalau berhasil arahkan ke halaman login
+            return redirect()->route('login');
+        }
+
+        public function logout(Request $request)
+        {
+            // logout itu harus menghapus session
+            $request->session()->flush();
+
+            // jalankan juga fungsi logut opada auth
+            Auth::logout();
+
+            // kembalikan ke halaman login
+            return Redirect('login');
+        }
+    }
+    ```
+
+7. Menambahkan kode pada route pada file routes/web.php
+
+    ```php
+    Route::get('login', [AuthController::class, 'index'])->name('login');
+    Route::get('register', [AuthController::class, 'register'])->name('register');
+    Route::post('proses_login', [AuthController::class, 'proses_login'])->name('proses_login');
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('proses_register', [AuthController::class, 'proses_register'])->name('proses_register');
+
+    // kita atur juga untuk middleware menggunakan group pada routing
+    // didalamnya terdapat group untuk menegecek kondisi login
+    // jika user yang login merupakan admin maka akan diarahkan ke AdminController
+    // jika user yang login merupakan admin maka akan diarahkan ke UserController
+    Route::group(['middleware' => ['auth']], function () {
+        Route::group(['middleware' => ['cek_login:1']], function() {
+            Route::resource('admin', AdminController::class);
+        });
+        Route::group(['middleware' => ['cek_login:2']], function() {
+            Route::resource('manager', ManagerController::class);
+        });
+    });
+    ```
+
+8. Membuat AdminController<br>
+   ![alt text](images/js9/p1.2.png)
+
+9. Mengisi AdminController
+
+    ```php
+    class AdminController extends Controller
+    {
+        public function index()
+        {
+            return view('admin');
+        }
+    }
+    ```
+
+10. Membuat ManagerController<br>
+    ![alt text](images/js9/p1.4.png)
+
+11. Mengisi ManagerController
+
+    ```php
+    class ManagerController extends Controller
+    {
+        public function index()
+        {
+            return view('manager');
+        }
+    }
+    ```
+
+12. Membuat layout
+13. Mengisi login.blade.php
+
+    ```php
+    @extends('adminlte::auth.auth-page', ['auth_type' => 'login'])
+
+    @section('adminlte_css_pre')
+        <link rel="stylesheet" href="{{ asset('vendor/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+    @stop
+
+    @php($login_url = View::getSection('login_url') ?? config('adminlte.login_url', 'login'))
+    @php($register_url = View::getSection('register_url') ?? config('adminlte.regiter_url', 'register'))
+    @php($password_reset_url = View::getSection('password_reset_url') ?? config('adminlte.password_reset_url', 'password/reset'))
+
+    @if (config('adminlte.use_route_url', false))
+        @php($login_url = $login_url ? route($login_url) : '')
+        @php($register_url = $register_url ? route($register_url) : '')
+        @php($password_reset_url = $password_reset_url ? route($password_reset_url) : '')
+    @else
+        @php($login_url = $login_url ? url($login_url) : '')
+        @php($register_url = $register_url ? url($register_url) : '')
+        @php($password_reset_url = $password_reset_url ? url($password_reset_url) : '')
+    @endif
+
+    @section('auth_header', __('adminlte::adminlte.login_message'))
+
+    @section('auth_body')
+        @error('login_gagal')
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <span class="alert-inner--text"><strong>Warning!</strong> {{ $message }}</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @enderror
+        <form action="{{ url('proses_login') }}" method="POST">
+            @csrf
+
+            <div class="input-group mb-3">
+                <input type="text" name="username" class="form-control @error('username') is-invalid @enderror"
+                    value="{{ old('username') }}" placeholder="Username" autofocus>
+
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-envelope {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                    </div>
+                </div>
+
+                @error('username')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+
+            <div class="input-group mb-3">
+                <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
+                    placeholder="{{ __('adminlte::adminlte.password') }}">
+
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-lock {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                    </div>
+                </div>
+
+                @error('password')
+                    <span class="invalid-feedback">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+
+            <div class="row">
+                <div class="col-7">
+                    <div class="icheck-primary" title="{{ __('adminlte::adminlte.remember_me_hint') }}">
+                        <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+
+                        <label for="remember">
+                            {{ __('adminlte::adminlte.remember_me') }}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-5">
+                    <button type="submit"
+                        class="btn btn-block {{ config('adminlte.classes_auth_btn', 'btn-flat btn-primary') }}">
+                        <span class="fas fa-sign-in-alt"></span>
+                        {{ __('adminlte::adminlte.sign_in') }}
+                    </button>
+                </div>
+            </div>
+        </form>
+    @stop
+
+    @section('auth_footer')
+        @if ($register_url)
+            <p class="my-0">
+                <a href="{{ route('register') }}">
+                    {{ __('adminlte::adminlte.register_a_new_membership') }}
+                </a>
+            </p>
+        @endif
+    @stop
+    ```
+
+14. Membuat halaman register
+
+    ```php
+    @extends('adminlte::auth.auth-page', ['auth_type' => 'register'])
+
+    @php($login_url = View::getSection('login_url') ?? config('adminlte.login_url', 'login'))
+    @php($register_url = View::getSection('register_url') ?? config('adminlte.regiter_url', 'register'))
+
+    @if (config('adminlte.use_route_url', false))
+        @php($login_url = $login_url ? route($login_url) : '')
+        @php($register_url = $register_url ? route($register_url) : '')
+    @else
+        @php($login_url = $login_url ? url($login_url) : '')
+        @php($register_url = $register_url ? url($register_url) : '')
+    @endif
+
+    @section('auth_header', __('adminlte::adminlte.register_message'))
+
+    @section('auth_body')
+        <form action="{{ url('proses_register') }}" method="POST">
+            @csrf
+
+            <div class="input-group mb-3">
+                <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror"
+                    value="{{ old('name') }}" placeholder="Nama" autofocus>
+
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                    </div>
+                </div>
+
+                @error('nama')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+
+            <div class="input-group mb-3">
+                <input type="text" name="username" class="form-control @error('username') is-invalid @enderror"
+                    value="{{ old('username') }}" placeholder="Username" autofocus>
+
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                    </div>
+                </div>
+
+                @error('username')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+
+            <div class="input-group mb-3">
+                <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
+                    placeholder="{{ __('adminlte::adminlte.password') }}">
+
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-lock {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                    </div>
+                </div>
+
+                @error('password')
+                    <span class="invalid-feedback">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+
+            <button type="submit" class="btn btn-block {{ config('adminlte.classes_auth_btn', 'btn-flat btn-primary') }}">
+                <span class="fas fa-sign-in-alt"></span>
+                {{ __('adminlte::adminlte.register') }}
+            </button>
+            </div>
+        </form>
+    @stop
+
+    @section('auth_footer')
+        <p class="my-0">
+            <a href="{{ route('login') }}">
+                {{ __('adminlte::adminlte.i_already_have_a_membership') }}
+            </a>
+        </p>
+    @stop
+    ```
+
+15. Buat halaman admin
+
+    ```php
+
+    @extends('layouts.app')
+
+    @section('subtitle', 'Admin')
+    @section('content_header_title', 'Home')
+    @section('content_header_subtitle', 'Admin')
+
+    @section('content')
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    Tampilan {{ Auth::user()->level_id == 1 ? 'Admin' : 'Manager' }}
+                </div>
+                <div class="card-body">
+                    <h1>Login Sebagai: {{ Auth::user()->level_id == 1 ? 'Admin' : 'Manager' }}</h1>
+                    <a href="{{ route('logout') }}">Logout</a>
+                </div>
+            </div>
+        </div>
+    @endsection
+
+    @push('js')
+    @endpush
+    ```
+
+16. Membuat halaman manager
+
+    ```php
+    @extends('layouts.app')
+
+    @section('subtitle', 'Admin')
+    @section('content_header_title', 'Home')
+    @section('content_header_subtitle', 'Admin')
+
+    @section('content')
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    Tampilan {{ Auth::user()->level_id == 1 ? 'Admin' : 'Manager' }}
+                </div>
+                <div class="card-body">
+                    <h1>Login Sebagai: {{ Auth::user()->level_id == 1 ? 'Admin' : 'Manager' }}</h1>
+                    <a href="{{ route('logout') }}">Logout</a>
+                </div>
+            </div>
+        </div>
+    @endsection
+
+    @push('js')
+    @endpush
+    ```
+
+17. Hasil <br>
+    ![alt text](images/js9/p1.5.png)
+    ![alt text](images/js9/p1.6.png)
+    <br>
+
+<hr>
+<br>
+<br>
+
+<div align=center>
+
+# Jobsheet 10 <br> (RESTFUL API)
+
+</div>
+
+### Praktikum 1 – Membuat RESTful API Register
+
+1. Download aplikasi postman<br>
+   ![alt text](images/js10/p1.png)
+
+2. install JWT <br>
+   ![alt text](images/js10/p1.1.png)
+
+3. publish konfigurasi file <br>
+   ![alt text](images/js10/p1.2.png)
+
+4. 1 file baru yaitu config/jwt.php <br>
+   ![alt text](images/js10/p1.3.png)
+
+5. membuat secret key JWT <br>
+   ![alt text](images/js10/p1.4.png)
+
+6. konfigurasi guard API <br>
+   ```php
+   'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+        'api' => [
+            'driver' => 'jwt',
+            'provider' => 'users',
+        ],
+    ],
+    ```
+
+7. menambahkan kode di model UserModel <br>
+   ```php
+    use Illuminate\Foundation\Auth\User as Authenticatable;
+    use Tymon\JWTAuth\Contracts\JWTSubject;
+    class UserModel extends Authenticatable implements JWTSubject
+    {
+        public function getJWTIdentifier(){
+            return $this->getKey();
+        }
+
+        public function getJWTCustomClaims(){
+            return[];
+        }
+    ```
+
+8. membuat controller untuk register <br>
+   ![alt text](images/js10/p1.5.png)
+
+9. mengubah file registerController <br>
+    ```php
+        <?php
+
+    namespace App\Http\Controllers\Api;
+
+    use App\Models\UserModel;
+    use App\Http\Controllers\Controller;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Validator;
+
+    class RegisterController extends Controller
+    {
+        public function __invoke(Request $request){
+            //set validation
+            $validator = Validator::make($request->all(), [
+                'username' => 'required',
+                'nama' => 'required',
+                'password' => 'required|min:5|confirmed',
+                'level_id' => 'required'
+            ]);
+
+            //if validations fails
+            if($validator->fails()) {
+                return response()->json($validator->errors(), 422);
+            }
+
+            //create user
+            $user = UserModel::create([
+                'username' => $request->username,
+                'nama' => $request->nama,
+                'password' => bcrypt($request->password),
+                'level_id' => $request->level_id,
+            ]);
+
+            //return response JSON user is created
+            if($user){
+                return response()->json([
+                    'success' => true,
+                    'user' => $user,
+                ], 201);
+            }
+
+            //return JSON process insert failed
+            return response()->json([
+                'success' => false,
+            ], 409);
+        }
+    }
+    ```
+
+10. mengubah routes/api.php <br>
+    ```php
+    use App\Http\Controllers\Api\RegisterController;
+
+    Route::post('/register', App\Http\Controllers\Api\RegisterController::class)->name('register');
+
+    ```
+
+11. uji coba REST API melalui aplikasi Postman <br>
+    ![alt text](images/js10/p1.6.png)
+
+12. coba masukkan data <br>
+    ![alt text](images/js10/p1.7.png)
+
+

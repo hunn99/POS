@@ -162,7 +162,7 @@ class UserController extends Controller
             'level_id' => $request->level_id
         ]);
 
-        return redirect('/user')->with('success', 'Data user berhasil disimpan ');
+        return redirect('/user')->with('success', 'Data user berhasil disimpan');
     }
 
     public function show(string $id)

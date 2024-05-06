@@ -91,7 +91,7 @@ class BarangController extends Controller
             'kategori_id' => $request->kategori_id
         ]);
 
-        return redirect('/barang')->with('success', 'Data barang berhasil disimpan ');
+        return redirect('/barang')->with('success', 'Data barang berhasil disimpan');
     }
 
     public function show(string $id)

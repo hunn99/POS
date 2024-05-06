@@ -87,6 +87,19 @@ class StokController extends Controller
             'stok_tanggal' => 'required|date-format:Y-m-d\TH:i' //Sesuaikan dengan format datetime-local
         ]);
 
+        // // Periksa apakah barang sudah memiliki stok sebelumnya
+        // $existingStok = StokModel::where('barang_id', $request->barang_id)->first();
+
+        // if ($existingStok) {
+        //     // Barang sudah memiliki stok sebelumnya, Anda bisa memilih untuk melakukan pembaruan stok
+        //     // Contoh: $existingStok->stok_jumlah += $request->stok_jumlah;
+        //     // $existingStok->save();
+
+        //     // Atau Anda bisa memilih untuk menolak penambahan stok baru
+        //     return redirect('/stok')->with('error', 'Stok untuk barang ini sudah ada, gunakan fitur update stok untuk menambah stok baru.');
+        // }
+
+
         StokModel::create([
             'user_id' => $request->user_id,
             'barang_id' => $request->barang_id,
