@@ -3456,38 +3456,41 @@ if ($request->level_id){
    ![alt text](images/js10/p1.4.png)
 
 6. konfigurasi guard API <br>
-   ```php
-   'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
-        'api' => [
-            'driver' => 'jwt',
-            'provider' => 'users',
-        ],
-    ],
+
+    ```php
+    'guards' => [
+         'web' => [
+             'driver' => 'session',
+             'provider' => 'users',
+         ],
+         'api' => [
+             'driver' => 'jwt',
+             'provider' => 'users',
+         ],
+     ],
     ```
 
 7. menambahkan kode di model UserModel <br>
-   ```php
-    use Illuminate\Foundation\Auth\User as Authenticatable;
-    use Tymon\JWTAuth\Contracts\JWTSubject;
-    class UserModel extends Authenticatable implements JWTSubject
-    {
-        public function getJWTIdentifier(){
-            return $this->getKey();
-        }
 
-        public function getJWTCustomClaims(){
-            return[];
-        }
+    ```php
+     use Illuminate\Foundation\Auth\User as Authenticatable;
+     use Tymon\JWTAuth\Contracts\JWTSubject;
+     class UserModel extends Authenticatable implements JWTSubject
+     {
+         public function getJWTIdentifier(){
+             return $this->getKey();
+         }
+
+         public function getJWTCustomClaims(){
+             return[];
+         }
     ```
 
 8. membuat controller untuk register <br>
    ![alt text](images/js10/p1.5.png)
 
 9. mengubah file registerController <br>
+
     ```php
         <?php
 
@@ -3539,6 +3542,7 @@ if ($request->level_id){
     ```
 
 10. mengubah routes/api.php <br>
+
     ```php
     use App\Http\Controllers\Api\RegisterController;
 
@@ -3552,4 +3556,76 @@ if ($request->level_id){
 12. coba masukkan data <br>
     ![alt text](images/js10/p1.7.png)
 
+### Praktikum 2 – Membuat RESTful API Login
+
+1. buat file controller dengan nama LoginController <br>
+   ![alt text](images/js10/p2.png)
+
+2. mengubah kode loginController <br>
+
+    ```php
+    <?php
+
+    namespace App\Http\Controllers\Api;
+
+    use App\Http\Controllers\Controller;
+    use Illuminate\Http\Request;
+    use illuminate\Support\Facades\Validator;
+
+    class LoginController extends Controller
+    {
+        public function __invoke(Request $request){
+            //set validation
+            $validator = Validator::make($request->all(),[
+                'username' => 'required',
+                'password' => 'required'
+            ]);
+
+            //if validation fails
+            if ($validator->fails()){
+                return response()->json($validator->errors(), 442);
+            }
+
+            //get credentials from request
+            $credentials = $request->only('username', 'password');
+
+            //if auth failed
+            if (!$token = auth()->guard('api')->attempt($credentials)){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Username atau Password Anda salah'
+                ], 401);
+            }
+
+            //if auth success
+            return response()->json([
+                'success' => true,
+                'user' => auth()->user(),
+                'token' => $token
+            ], 200);
+        }
+    }
+    ```
+
+3. menambahkan route baru pada file api.php yaitu /login dan /user <br>
+
+    ```php
+        Route::post('/login', App\Http\Controllers\Api\LoginController::class)->name('login');
+    Route::middleware('auth:api')->get('/user', function(Request $request){
+        return $request->user();
+    });
+    ```
+
+4. uji coba REST API melalui aplikasi Postman <br>
+   ![alt text](images/js10/p2.1.png)
+
+5. mengisikan username dan password sesuai dengan data user yang ada <br>
+   ![alt text](images/js10/p2.2.png)
+
+6. menggunakan data yang salah<br>
+   ![alt text](images/js10/p2.3.png)
+
+7. menggunakan data yang benar dan method get <br>
+   ![alt text](images/js10/p2.4.png)
+   data pengguna yang sedang login secara langsung dengan metode GET, maka akan mendapatkan respons yang berisi informasi tentang pengguna yang sedang login, seperti yang ditampilkan.
 
