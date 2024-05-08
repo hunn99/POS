@@ -3681,3 +3681,77 @@ if ($request->level_id){
 5. uji coba REST API melalui aplikasi Postman<br>
 6. ![alt text](images/js10/p3.1.png)
 
+### Praktikum 4 – Implementasi CRUD dalam RESTful API
+
+1. Membuat controller untuk mengolah API pada data level <Br>
+   ![alt text](images/js10/p4.png)
+
+2. Menambah kode di controllernya <br>
+
+    ```php
+        <?php
+
+    namespace App\Http\Controllers\Api;
+
+    use App\Http\Controllers\Controller;
+    use App\Models\LevelModel;
+    use Illuminate\Http\Request;
+
+    class LevelController extends Controller
+    {
+        public function index()
+        {
+            return LevelModel::all();
+        }
+
+        public function store(Request $request)
+        {
+            $level = levelModel::create($request->all());
+            return response()->json($level, 201);
+        }
+
+        public function show(LevelModel $level)
+        {
+            return LevelModel::find($level);
+        }
+
+        public function update(Request $request, LevelModel $level){
+            $level->update($request->all());
+            return LevelModel::find($level);
+        }
+
+        public function destroy(LevelModel $user){
+            $user->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data terhapus',
+            ]);
+        }
+    }
+    ```
+
+3. Melengkapi routes pada api.php <br>
+
+    ```php
+        Route::get('levels', [LevelController::class, 'index']);
+    Route::post('levels', [LevelController::class, 'store']);
+    Route::get('levels/{level}', [LevelController::class, 'show']);
+    Route::put('levels/{level}', [LevelController::class, 'update']);
+    Route::delete('levels/{level}', [LevelController::class, 'destroy']);
+    ```
+
+4. uji coba API<br>
+   ![alt text](images/js10/p4.1.png)
+
+5. Penambahan data<br>
+   ![alt text](images/js10/p4.2.png)
+
+6. detail data<br>
+   ![alt text](images/js10/p4.3.png)
+
+7. Melakukan edit<br>
+   ![alt text](images/js10/p4.4.png)
+
+8. hapus data<br>
+   ![alt text](images/js10/p4.5.png)
