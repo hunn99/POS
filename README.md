@@ -3629,3 +3629,55 @@ if ($request->level_id){
    ![alt text](images/js10/p2.4.png)
    data pengguna yang sedang login secara langsung dengan metode GET, maka akan mendapatkan respons yang berisi informasi tentang pengguna yang sedang login, seperti yang ditampilkan.
 
+### Praktikum 3 – Membuat RESTful API Logout
+
+1. Tambahkan kode berikut pada file .env <br>
+
+    ```php
+    JWT_SHOW_BLACKLIST_EXCEPTION=true
+    ```
+
+2. Membuat Controller baru dengan nama LogoutController <br>
+   ![alt text](images/js10/p3.png)
+
+3. mengubah file logoutcontroller <br>
+
+    ```php
+        <?php
+
+    namespace App\Http\Controllers\Api;
+
+    use Illuminate\Http\Request;
+    use App\Http\Controllers\Controller;
+    use Tymon\JWTAuth\Facades\JWTAuth;
+    use Tymon\JWTAuth\Validators\JWTException;
+    use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+    use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+
+    class LogoutController extends Controller
+    {
+        public function __invoke(Request $request)
+        {
+            //remove token
+            $removeToken = JWTAuth::invalidate(JWTAuth::getToken());
+
+            if ($removeToken) {
+                //return response JSON
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Logout Berhasil!',
+                ]);
+            }
+        }
+    }
+    ```
+
+4. Menambahkan routes pada api.php <br>
+
+    ```php
+    Route::post('/logout', App\Http\Controllers\Api\LogoutController::class)->name('logout');
+    ```
+
+5. uji coba REST API melalui aplikasi Postman<br>
+6. ![alt text](images/js10/p3.1.png)
+
